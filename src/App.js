@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import DatePicker from "./Components/DatePicker/DatePicker.js";
+import "tachyons";
+import "primereact/resources/themes/nova-light/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+import AppointmentTable from "./Containers/AppointmentTable/AppointmentTable";
+import AppointmentCards from "./Components/AppointmentCards/AppointmentCards";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      appIsMounted: false,
+      programari: []
+    };
+  }
+
+  mountApp = () => {
+    this.setState({ appIsMounted: true });
+  };
+
+  loadProgramari = list => {
+    this.setState({ programari: list });
+  };
+
+  render() {
+    return (
+      <div className="appWrapper flex flex-wrap">
+        <DatePicker />
+        <AppointmentTable
+          mountApp={this.mountApp}
+          appIsMounted={this.state.appIsMounted}
+        />
+      </div>
+    );
+  }
 }
 
 export default App;
