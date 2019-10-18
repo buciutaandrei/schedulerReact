@@ -1,0 +1,6 @@
+.hourWrapper {
+  background-color: white;
+  grid-column-start: 1;
+  height: 2em;
+  display: table;
+}

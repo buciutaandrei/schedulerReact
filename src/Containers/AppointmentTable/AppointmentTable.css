@@ -4,19 +4,25 @@
 }
 
 .tableWrapper {
-  width: 50vw;
+  position: relative;
+  max-width: 50%;
+  flex: 1;
   display: grid;
   grid-auto-flow: column;
   grid-template-columns: 10% 30% 30% 30%;
-  grid-template-rows: repeat (auto-fit, (100, 1fr));
-  grid-gap: 1px;
+  z-index: 10;
 }
 
-.tableWrapper > div {
-  background-color: white;
-  padding: 5px;
+@media screen and (max-width: 800px) {
+  .tableWrapper {
+    max-width: 100%;
+  }
 }
 
-.hourWrapper {
-  grid-column-start: 1;
+.programare {
+  margin-top: -3px;
+  margin-bottom: -2px;
+  margin-right: 1px;
+  margin-left: 1px;
+  border-radius: 2%;
 }

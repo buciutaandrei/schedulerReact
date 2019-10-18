@@ -13,7 +13,7 @@ class DatePicker extends Component {
 
   render() {
     return (
-      <div>
+      <div className="datePickerWrapper">
         <Calendar
           className="pa4"
           locale={ro}

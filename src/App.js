@@ -6,7 +6,13 @@ import "primereact/resources/themes/nova-light/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import AppointmentTable from "./Containers/AppointmentTable/AppointmentTable";
-import AppointmentCards from "./Components/AppointmentCards/AppointmentCards";
+import {
+  createMuiTheme,
+  makeStyles,
+  ThemeProvider
+} from "@material-ui/core/styles";
+import { CssBaseline } from "@material-ui/core";
+import red from "@material-ui/core/colors/red";
 
 class App extends Component {
   constructor() {
@@ -26,14 +32,23 @@ class App extends Component {
   };
 
   render() {
+    const theme = createMuiTheme({
+      status: {
+        danger: red[100]
+      }
+    });
+
     return (
-      <div className="appWrapper flex flex-wrap">
-        <DatePicker />
-        <AppointmentTable
-          mountApp={this.mountApp}
-          appIsMounted={this.state.appIsMounted}
-        />
-      </div>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <div className="appWrapper flex flex-wrap">
+          <DatePicker />
+          <AppointmentTable
+            mountApp={this.mountApp}
+            appIsMounted={this.state.appIsMounted}
+          />
+        </div>
+      </ThemeProvider>
     );
   }
 }
