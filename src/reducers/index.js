@@ -1,13 +1,15 @@
 import {
-  ADD_PROGRAMARE,
   SELECT_PROGRAMARE,
   HANDLE_FORM_CHANGE,
   SELECT_DATE,
   FETCH_PROGRAMARI_SUCCESS,
-  FETCH_PROGRAMARI_STARTED
+  FETCH_PROGRAMARI_STARTED,
+  ADD_PROGRAMARE_SUCCESS,
+  ADD_PROGRAMARE_STARTED
 } from "../constants/action-types";
 
 const initialState = {
+  added: true,
   loading: true,
   selectedDate: new Date(),
   formChange: {},
@@ -21,7 +23,7 @@ function rootReducer(state = initialState, action) {
   }
 
   switch (action.type) {
-    case ADD_PROGRAMARE: {
+    case ADD_PROGRAMARE_STARTED: {
       return Object.assign({}, state, {
         programari: state.programari.concat(action.payload)
       });
@@ -32,9 +34,12 @@ function rootReducer(state = initialState, action) {
       });
     }
     case HANDLE_FORM_CHANGE: {
-      return Object.assign({}, state, {
-        selectedProgramare: action.payload
-      });
+      const oldState = state.selectedProgramare;
+      console.log(state.selectedProgramare);
+      const newState = Object.assign({}, oldState, action.payload);
+      console.log(newState);
+
+      return Object.assign({}, state, { selectedProgramare: newState });
     }
 
     case SELECT_DATE: {
@@ -42,11 +47,15 @@ function rootReducer(state = initialState, action) {
     }
 
     case FETCH_PROGRAMARI_SUCCESS: {
-      return Object.assign({}, state, action.payload, {loading: false});
+      return Object.assign({}, state, action.payload, { loading: false });
     }
 
     case FETCH_PROGRAMARI_STARTED: {
-      return Object.assign({}, state, { loading: true})
+      return Object.assign({}, state, { loading: true });
+    }
+
+    case ADD_PROGRAMARE_SUCCESS: {
+      return state;
     }
 
     default:

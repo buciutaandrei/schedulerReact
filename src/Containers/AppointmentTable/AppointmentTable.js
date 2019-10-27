@@ -74,7 +74,7 @@ class AppointmentTable extends Component {
               zIndex: "-10"
             }}
           >
-          <TableBackground />
+            <TableBackground />
           </div>
           <HourRows />
           <div

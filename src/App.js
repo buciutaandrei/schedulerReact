@@ -10,7 +10,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 import red from "@material-ui/core/colors/red";
 import { fetchProgramari } from "./actions/index";
-import {connect} from 'react-redux'
+import { connect } from "react-redux";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -19,19 +19,19 @@ const mapDispatchToProps = dispatch => {
 };
 
 const mapStateToProps = state => {
-  return { programari: state.programari}
-}
+  return { programari: state.programari, selectedDate: state.selectedDate };
+};
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      appIsMounted: false,
+      appIsMounted: false
     };
   }
 
   UNSAFE_componentWillMount() {
-    this.props.fetchProgramari();  
+    this.props.fetchProgramari(this.props.selectedDate);
   }
 
   mountApp = () => {
@@ -64,4 +64,7 @@ class App extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

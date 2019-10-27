@@ -6,10 +6,12 @@ import MomentLocaleUtils from "react-day-picker/moment";
 import "moment/locale/ro";
 import { connect } from "react-redux";
 import { selectDate } from "../../actions/index";
+import { fetchProgramari } from "../../actions/index";
 
 const mapDispatchToProps = dispatch => {
   return {
-    selectDate: selectedDate => dispatch(selectDate(selectedDate))
+    selectDate: selectedDate => dispatch(selectDate(selectedDate)),
+    fetchProgramari: programare => dispatch(fetchProgramari(programare))
   };
 };
 
@@ -23,8 +25,8 @@ const DatePicker = props => {
   const handleDateSelect = event => {
     const selectedDate = event;
     props.selectDate({ selectedDate });
+    props.fetchProgramari({ selectedDate });
   };
-
 
   return (
     <div className="datePickerWrapper">
