@@ -6,21 +6,32 @@ import "primereact/resources/themes/nova-light/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import AppointmentTable from "./Containers/AppointmentTable/AppointmentTable";
-import {
-  createMuiTheme,
-  makeStyles,
-  ThemeProvider
-} from "@material-ui/core/styles";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 import red from "@material-ui/core/colors/red";
+import { fetchProgramari } from "./actions/index";
+import {connect} from 'react-redux'
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchProgramari: programare => dispatch(fetchProgramari(programare))
+  };
+};
+
+const mapStateToProps = state => {
+  return { programari: state.programari}
+}
 
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       appIsMounted: false,
-      programari: []
     };
+  }
+
+  UNSAFE_componentWillMount() {
+    this.props.fetchProgramari();  
   }
 
   mountApp = () => {
@@ -53,4 +64,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);

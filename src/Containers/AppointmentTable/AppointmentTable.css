@@ -25,4 +25,10 @@
   margin-right: 1px;
   margin-left: 1px;
   border-radius: 2%;
+  cursor: pointer;
+  color: snow;
+}
+
+.programare:hover {
+  z-index: 30 !important;
 }

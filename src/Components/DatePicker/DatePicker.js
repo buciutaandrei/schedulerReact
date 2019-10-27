@@ -1,33 +1,45 @@
-import React, { Component } from "react";
+import React from "react";
 import "./DatePicker.css";
-import { Calendar } from "primereact/calendar";
-import { ro } from "./ro_RO.js";
+import DayPicker from "react-day-picker";
+import "react-day-picker/lib/style.css";
+import MomentLocaleUtils from "react-day-picker/moment";
+import "moment/locale/ro";
+import { connect } from "react-redux";
+import { selectDate } from "../../actions/index";
 
-class DatePicker extends Component {
-  constructor() {
-    super();
-    this.state = {
-      selectedDate: ""
-    };
-  }
+const mapDispatchToProps = dispatch => {
+  return {
+    selectDate: selectedDate => dispatch(selectDate(selectedDate))
+  };
+};
 
-  render() {
-    return (
-      <div className="datePickerWrapper">
-        <Calendar
-          className="pa4"
-          locale={ro}
-          showButtonBar={true}
-          disabledDays={[0, 6]}
-          readOnlyInput={true}
-          dateFormat="dd/mm/yy"
-          inline={true}
-          value={this.state.selectedDate}
-          onChange={e => this.setState({ selectedDate: e.value })}
-        />
-      </div>
-    );
-  }
-}
+const mapStateToProps = state => {
+  return {
+    selectedDate: state.selectedDate
+  };
+};
 
-export default DatePicker;
+const DatePicker = props => {
+  const handleDateSelect = event => {
+    const selectedDate = event;
+    props.selectDate({ selectedDate });
+  };
+
+
+  return (
+    <div className="datePickerWrapper">
+      <DayPicker
+        localeUtils={MomentLocaleUtils}
+        locale="ro"
+        selectedDays={props.selectedDate}
+        onDayClick={event => handleDateSelect(event)}
+        disabledDays={{ daysOfWeek: [0, 6] }}
+      />
+    </div>
+  );
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DatePicker);

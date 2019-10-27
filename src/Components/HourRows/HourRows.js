@@ -1,6 +1,7 @@
 import React from "react";
 import { hoursArray } from "../DataTables/hoursArray";
 import "./HourRows.css";
+import moment from "moment";
 
 const hourRows = () => {
   const array = hoursArray.map(hour => {
@@ -8,25 +9,12 @@ const hourRows = () => {
     if (hour === 0) {
       hourText = null;
     } else {
-      if (hour > 999) {
-        if (hour % 100 === 0) {
-          hourText = `${Math.floor(hour / 100)}:00`;
-        } else {
-          hourText = `${Math.floor(hour / 100)}:30`;
-        }
-      } else {
-        if (hour % 100 === 0) {
-          hourText = `0${Math.floor(hour / 100)}:00`;
-        } else {
-          hourText = `0${Math.floor(hour / 100)}:30`;
-        }
-      }
+      hourText = moment(hour, "Hmm").format("HH:mm");
     }
 
     return (
-      <React.Fragment>
+      <React.Fragment key={hour}>
         <div
-          key={hourText}
           style={{ backgroundColor: "rgba(0,0,0,0)" }}
           className="hourWrapper overflow-hidden tc"
         >

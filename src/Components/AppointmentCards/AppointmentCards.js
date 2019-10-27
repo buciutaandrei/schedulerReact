@@ -1,29 +1,36 @@
 import React from "react";
-import { programari } from "../../Components/DataTables/programari";
+import { connect } from "react-redux";
 import { hoursArray } from "../../Components/DataTables/hoursArray";
-import { Card } from "@material-ui/core/Card/Card";
 
-const AppointmentCards = () => {
-  const array = programari.map(programare => {
+const mapStateToProps = state => {
+  return { programari: state.programari, selectedDate: state.selectedDate };
+};
+
+const AppointmentCards = props => {
+  const array = props.programari.map(programare => {
+    let oraProgramare = "";
+    programare.ora > 999
+      ? (oraProgramare = programare.ora)
+      : (oraProgramare = `0${programare.ora}`);
     let hourIndex = hoursArray.indexOf(Number(programare.ora)) + 1;
     let cabinetIndex = Number(programare.cabinet) + 1;
     let durata = programare.durata;
+    let bgColor = `bg-${programare.medic}`;
     return (
       <div
-        id={`${programare.cabinet}${programare.ora}`}
-        key={`${programare.cabinet}${programare.ora}`}
-        cabinet={`${programare.cabinet}`}
-        ora={`${programare.ora}`}
-        className="programare"
+        id={`${programare.cabinet}${oraProgramare}`}
+        key={`${programare.cabinet}${oraProgramare}`}
+        className={`programare pa2 tc dib grow black-90 shadow-4 ${bgColor}`}
         style={{
           gridColumn: cabinetIndex,
           gridRow: `${hourIndex} / span ${durata}`,
           zIndex: "20"
         }}
+        onClick={props.modalToggle}
       >
         {programare.pacient}
-        <br />
-        {programare.dr}
+        {durata > 1 ? <br /> : " "}
+        {programare.medic}
       </div>
     );
   });
@@ -31,4 +38,4 @@ const AppointmentCards = () => {
   return <React.Fragment>{array}</React.Fragment>;
 };
 
-export default AppointmentCards;
+export default connect(mapStateToProps)(AppointmentCards);

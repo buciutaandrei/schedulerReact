@@ -5,31 +5,30 @@ import "./TableBackground.css";
 const TableBackground = () => {
   const array = hoursArray.map((hours, i) => {
     return (
-      <React.Fragment>
-        <tr
-          key={i}
+      <React.Fragment key={`fragment${i}`}>
+        <div
           className="trBackground"
           style={{
             display: "table",
             width: "100%"
           }}
         >
-          <th
+          <div
             className="tableBackground"
             style={{ width: "10%", height: "2em" }}
           >
             {" "}
-          </th>
-          <td className="tableBackground" style={{ width: "30%" }}>
+          </div>
+          <div  className="tableBackground" style={{ width: "30%" }}>
             {" "}
-          </td>
-          <td className="tableBackground" style={{ width: "30%" }}>
+          </div>
+          <div className="tableBackground" style={{ width: "30%" }}>
             {" "}
-          </td>
-          <td className="tableBackground" style={{ width: "30%" }}>
+          </div>
+          <div className="tableBackground" style={{ width: "30%" }}>
             {" "}
-          </td>
-        </tr>
+          </div>
+        </div>
       </React.Fragment>
     );
   });
