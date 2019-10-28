@@ -1,16 +1,50 @@
-import React from "react";
+import React, {Component} from "react";
 import { connect } from "react-redux";
 import { hoursArray } from "../../Components/DataTables/hoursArray";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import "./AppointmentCards.css";
+import { deleteProgramare, fetchProgramari } from "../../actions/index";
 
 const mapStateToProps = state => {
-  return { programari: state.programari, selectedDate: state.selectedDate };
+  return {
+    programari: state.programari,
+    selectedDate: state.selectedDate
+  };
 };
 
-const AppointmentCards = props => {
-  const array = props.programari.map(programare => {
+const mapDispatchToProps = dispatch => {
+  return {
+    deleteProgramare: programare => dispatch(deleteProgramare(programare)),
+    fetchProgramari: programare => dispatch(fetchProgramari(programare))
+  };
+  };
+
+class AppointmentCards extends Component {
+
+
+  UNSAFE_componentWillMount() {
+    this.props.fetchProgramari(this.props.selectedDate);
+  }
+
+  componentWillUnmount() {
+    console.log("unmounting")
+  }
+
+  handleDelete = event => {
+    const payload = Object.assign(
+      {},
+      { selectedDate: this.props.selectedDate },
+      { id: event }
+    );
+    this.props.deleteProgramare({ ...payload });
+  };
+
+  render(){
+
+  const { programari, modalToggle } = this.props
+  
+  const array = programari.map(programare => {
     let oraProgramare = "";
     programare.ora > 999
       ? (oraProgramare = programare.ora)
@@ -34,10 +68,14 @@ const AppointmentCards = props => {
         {durata > 1 ? <br /> : " "}
         {programare.medic}
         <div className="editIcon">
-          <EditIcon onClick={props.modalToggle} />
+          <EditIcon onClick={modalToggle} />
         </div>
         <div className="deleteIcon">
-          <DeleteIcon onClick={() => console.log("asdfasdf")} />
+          <DeleteIcon
+            onClick={() =>
+              this.handleDelete(`${programare.cabinet}${oraProgramare}`)
+            }
+          />
         </div>
       </div>
     );
@@ -45,5 +83,8 @@ const AppointmentCards = props => {
 
   return <React.Fragment>{array}</React.Fragment>;
 };
-
-export default connect(mapStateToProps)(AppointmentCards);
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppointmentCards);

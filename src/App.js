@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import "./App.css";
 import DatePicker from "./Components/DatePicker/DatePicker.js";
 import "tachyons";
@@ -9,60 +9,35 @@ import AppointmentTable from "./Containers/AppointmentTable/AppointmentTable";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import { CssBaseline } from "@material-ui/core";
 import red from "@material-ui/core/colors/red";
-import { fetchProgramari } from "./actions/index";
 import { connect } from "react-redux";
+import LoadingOverlay from 'react-loading-overlay';
 
 const mapDispatchToProps = dispatch => {
-  return {
-    fetchProgramari: programare => dispatch(fetchProgramari(programare))
-  };
+  return {};
 };
 
 const mapStateToProps = state => {
-  return { programari: state.programari, selectedDate: state.selectedDate };
+  return { adding: state.adding, loading: state.loading, deleting: state.deleting};
 };
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      appIsMounted: false
-    };
-  }
+const App = props => {
 
-  UNSAFE_componentWillMount() {
-    this.props.fetchProgramari(this.props.selectedDate);
-  }
+      const { loading, adding, deleting } = props;
+      let loadingState = loading || adding || deleting;
 
-  mountApp = () => {
-    this.setState({ appIsMounted: true });
-  };
-
-  loadProgramari = list => {
-    this.setState({ programari: list });
-  };
-
-  render() {
-    const theme = createMuiTheme({
-      status: {
-        danger: red[100]
-      }
-    });
-
+  
     return (
-      <ThemeProvider theme={theme}>
+      <React.Fragment>
+        <LoadingOverlay active={loadingState} spinner>
         <CssBaseline />
         <div className="appWrapper flex flex-wrap">
           <DatePicker />
-          <AppointmentTable
-            mountApp={this.mountApp}
-            appIsMounted={this.state.appIsMounted}
-          />
+          <AppointmentTable />
         </div>
-      </ThemeProvider>
-    );
+        </LoadingOverlay>
+      </React.Fragment>
+    )
   }
-}
 
 export default connect(
   mapStateToProps,

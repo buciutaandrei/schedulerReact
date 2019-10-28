@@ -10,17 +10,23 @@ import HourRows from "../../Components/HourRows/HourRows";
 import AddAppointment from "../../Components/AddAppointment/AddAppointment";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
+import { fetchProgramari } from "../../actions/index";
 
 const mapDispatchToProps = dispatch => {
   return {
-    selectProgramare: programare => dispatch(selectProgramare(programare))
+    selectProgramare: programare => dispatch(selectProgramare(programare)),
+    fetchProgramari: programare => dispatch(fetchProgramari(programare))
   };
 };
 
 const mapStateToProps = state => {
   return {
+    selectedDate: state.selectedDate,
     selectedProgramare: state.selectedProgramare,
-    programari: state.programari
+    programari: state.programari,
+    adding: state.adding,
+    loading: state.loading,
+    deleting: state.deleting
   };
 };
 
@@ -32,6 +38,10 @@ class AppointmentTable extends Component {
       idProgramare: "",
       pacient: ""
     };
+  }
+
+    UNSAFE_componentWillMount() {
+    this.props.fetchProgramari(this.props.selectedDate);
   }
 
   handleChange = event => {
@@ -56,6 +66,12 @@ class AppointmentTable extends Component {
   };
 
   render() {
+
+
+    const { loading, adding, deleting } = this.props;
+    let loadingState = loading || adding || deleting;
+  
+
     return (
       <React.Fragment>
         <AddAppointment
@@ -95,7 +111,11 @@ class AppointmentTable extends Component {
           >
             Cabinetul 3
           </div>
-          <AppointmentCards modalToggle={this.modalToggle} />
+          {!loadingState ? (
+            <AppointmentCards modalToggle={this.modalToggle} />
+          ) : (
+            null
+          )}
         </div>
         <Fab
           aria-label="add"

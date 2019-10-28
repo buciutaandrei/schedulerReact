@@ -6,58 +6,43 @@ import {
   FETCH_PROGRAMARI_SUCCESS,
   FETCH_PROGRAMARI_STARTED,
   ADD_PROGRAMARE_STARTED,
-  ADD_PROGRAMARE_SUCCESS
+  ADD_PROGRAMARE_SUCCESS,
+  DELETE_PROGRAMARE_STARTED,
+  DELETE_PROGRAMARE_SUCCESS
 } from "../constants/action-types";
 import moment from "moment";
 
-export function addProgramare(payload) {
+export function deleteProgramare(payload) {
   const collection = moment(payload.selectedDate).format("DDMMY");
-  console.log("asdf");
-  console.log(payload);
   return dispatch => {
-    dispatch(addProgramareStarted);
+    dispatch({ type: DELETE_PROGRAMARE_STARTED });
 
     const url = `http://localhost:3001/${collection}`;
-    const {
-      pacient,
-      medic,
-      ora,
-      durata,
-      cabinet,
-      index,
-      selectedDate
-    } = payload;
     axios({
-      method: "post",
+      method: "delete",
       url: url,
-      data: {
-        pacient: pacient,
-        medic: medic,
-        ora: ora,
-        durata: durata,
-        cabinet: cabinet,
-        index: index,
-        date: selectedDate
-      }
+      data: payload
     }).then(res => {
-      dispatch(addProgramareSuccess(res.data));
+      dispatch({ type: DELETE_PROGRAMARE_SUCCESS, payload: res.data });
     });
   };
 }
 
-const addProgramareStarted = () => ({
-  type: ADD_PROGRAMARE_STARTED,
-  payload: {
-    added: false
-  }
-});
+export function addProgramare(payload) {
+  const collection = moment(payload.selectedDate).format("DDMMY");
+  return dispatch => {
+    dispatch({ type: ADD_PROGRAMARE_STARTED });
 
-const addProgramareSuccess = () => ({
-  type: ADD_PROGRAMARE_SUCCESS,
-  payload: {
-    added: true
-  }
-});
+    const url = `http://localhost:3001/${collection}`;
+    axios({
+      method: "post",
+      url: url,
+      data: payload
+    }).then(res => {
+      dispatch({ type: ADD_PROGRAMARE_SUCCESS, payload: res.data });
+    });
+  };
+}
 
 export function selectProgramare(payload) {
   return { type: SELECT_PROGRAMARE, payload };

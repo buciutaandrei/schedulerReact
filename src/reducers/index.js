@@ -5,11 +5,14 @@ import {
   FETCH_PROGRAMARI_SUCCESS,
   FETCH_PROGRAMARI_STARTED,
   ADD_PROGRAMARE_SUCCESS,
-  ADD_PROGRAMARE_STARTED
+  ADD_PROGRAMARE_STARTED,
+  DELETE_PROGRAMARE_STARTED,
+  DELETE_PROGRAMARE_SUCCESS
 } from "../constants/action-types";
 
 const initialState = {
-  added: true,
+  deleting: false,
+  adding: false,
   loading: true,
   selectedDate: new Date(),
   formChange: {},
@@ -23,10 +26,17 @@ function rootReducer(state = initialState, action) {
   }
 
   switch (action.type) {
-    case ADD_PROGRAMARE_STARTED: {
+    case DELETE_PROGRAMARE_STARTED: {
       return Object.assign({}, state, {
-        programari: state.programari.concat(action.payload)
+        deleting: true
       });
+    }
+
+    case DELETE_PROGRAMARE_SUCCESS: {
+      return Object.assign({}, state, { deleting: false });
+    }
+    case ADD_PROGRAMARE_STARTED: {
+      return Object.assign({}, state, { adding: true });
     }
     case SELECT_PROGRAMARE: {
       return Object.assign({}, state, {
@@ -55,7 +65,9 @@ function rootReducer(state = initialState, action) {
     }
 
     case ADD_PROGRAMARE_SUCCESS: {
-      return state;
+      return Object.assign({}, state, {
+        adding: false
+      });
     }
 
     default:
