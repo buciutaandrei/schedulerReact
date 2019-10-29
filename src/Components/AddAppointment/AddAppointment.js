@@ -4,7 +4,8 @@ import "./AddAppointment.css";
 import {
   addProgramare,
   handleFormChange,
-  toggleAddModal
+  toggleAddModal,
+  deleteProgramare
 } from "../../actions/index";
 import { hourDropdownList } from "../DataTables/hoursArray";
 import {
@@ -28,7 +29,8 @@ const mapDispatchToProps = dispatch => {
   return {
     addProgramare: programare => dispatch(addProgramare(programare)),
     handleFormChange: formChange => dispatch(handleFormChange(formChange)),
-    toggleAddModal: toggleModal => dispatch(toggleAddModal(toggleModal))
+    toggleAddModal: toggleModal => dispatch(toggleAddModal(toggleModal)),
+    deleteProgramare: programare => dispatch(deleteProgramare(programare))
   };
 };
 
@@ -54,7 +56,7 @@ const AddAppointment = props => {
     props.handleFormChange({ ...payload });
   };
 
-  const submitClick = () => {
+  const addProgramare = () => {
     let programare = props.selectedProgramare;
     let index = `${programare.cabinet}${moment(programare.ora, "Hmm").format(
       "HHmm"
@@ -63,10 +65,27 @@ const AddAppointment = props => {
       index: index,
       selectedDate: selectedDate
     });
-    console.log("a");
     props.handleFormChange({ index: index });
     props.addProgramare(programare);
     props.toggleAddModal(programare);
+  };
+
+  const programareDelete = () => {
+    const { editDate, index } = props.selectedProgramare;
+    const payload = {
+      selectedDate: editDate,
+      id: index
+    };
+    deleteProgramare(payload);
+    addProgramare();
+  };
+
+  const submitClick = () => {
+    if (props.selectedProgramare.edit) {
+      programareDelete();
+    } else {
+      addProgramare();
+    }
   };
 
   const doctorList = [

@@ -2,6 +2,7 @@ import {
   SELECT_PROGRAMARE,
   HANDLE_FORM_CHANGE,
   SELECT_DATE,
+  SELECT_EDIT_DATE,
   FETCH_PROGRAMARI_SUCCESS,
   FETCH_PROGRAMARI_STARTED,
   ADD_PROGRAMARE_SUCCESS,
@@ -18,7 +19,7 @@ const initialState = {
   loading: true,
   selectedDate: new Date(),
   formChange: {},
-  selectedProgramare: {},
+  selectedProgramare: { pacient: "" },
   programari: []
 };
 
@@ -28,6 +29,10 @@ function rootReducer(state = initialState, action) {
   }
 
   switch (action.type) {
+    case SELECT_EDIT_DATE: {
+      return Object.assign({}, state, action.payload);
+    }
+
     case TOGGLE_ADD_MODAL: {
       return Object.assign(
         {},
@@ -37,11 +42,11 @@ function rootReducer(state = initialState, action) {
       );
     }
     case DELETE_PROGRAMARE_STARTED: {
-      return Object.assign({}, state, {
-        deleting: true
-      });
+      console.log("started delete");
+      return Object.assign({}, state, { deleting: true });
     }
     case DELETE_PROGRAMARE_SUCCESS: {
+      console.log(action.payload);
       return Object.assign({}, state, { deleting: false });
     }
     case ADD_PROGRAMARE_STARTED: {
@@ -54,15 +59,13 @@ function rootReducer(state = initialState, action) {
     }
     case HANDLE_FORM_CHANGE: {
       const oldState = state.selectedProgramare;
-      console.log(state.selectedProgramare);
       const newState = Object.assign({}, oldState, action.payload);
-      console.log(newState);
 
       return Object.assign({}, state, { selectedProgramare: newState });
     }
 
     case SELECT_DATE: {
-      return Object.assign({}, state, action.payload);
+      return Object.assign({}, state, { selectedDate: action.payload });
     }
 
     case FETCH_PROGRAMARI_SUCCESS: {
@@ -70,6 +73,7 @@ function rootReducer(state = initialState, action) {
     }
 
     case FETCH_PROGRAMARI_STARTED: {
+      console.log("fetch start");
       return Object.assign({}, state, { loading: true });
     }
 

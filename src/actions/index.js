@@ -3,6 +3,7 @@ import {
   SELECT_PROGRAMARE,
   HANDLE_FORM_CHANGE,
   SELECT_DATE,
+  SELECT_EDIT_DATE,
   FETCH_PROGRAMARI_SUCCESS,
   FETCH_PROGRAMARI_STARTED,
   ADD_PROGRAMARE_STARTED,
@@ -14,31 +15,39 @@ import {
 import moment from "moment";
 
 export function toggleAddModal(payload) {
-  console.log(payload);
   return { type: TOGGLE_ADD_MODAL, payload };
 }
 
-export function deleteProgramare(payload) {
-  const collection = moment(payload.selectedDate).format("DDMMY");
-  return dispatch => {
-    dispatch({ type: DELETE_PROGRAMARE_STARTED });
+export function selectEditDate(payload) {
+  return { type: SELECT_EDIT_DATE, payload };
+}
 
+export function deleteProgramare(payload) {
+  console.log("delete");
+  const collection = moment(payload.selectedDate).format("DDMMY");
+  console.log(collection);
+  return dispatch => {
+    dispatch({ type: DELETE_PROGRAMARE_SUCCESS });
     const url = `http://localhost:3001/${collection}`;
     axios({
       method: "delete",
       url: url,
       data: payload
     }).then(res => {
-      dispatch({ type: DELETE_PROGRAMARE_SUCCESS, payload: res.data });
+      dispatch(deleteProgramareSuccess(res.data));
     });
   };
 }
 
+const deleteProgramareStarted = () => ({
+  type: DELETE_PROGRAMARE_STARTED
+});
+
 export function addProgramare(payload) {
+  console.log("add");
   const collection = moment(payload.selectedDate).format("DDMMY");
   return dispatch => {
     dispatch({ type: ADD_PROGRAMARE_STARTED });
-
     const url = `http://localhost:3001/${collection}`;
     axios({
       method: "post",
@@ -64,22 +73,11 @@ export function selectDate(payload) {
 
 export function fetchProgramari(payload) {
   return dispatch => {
-    dispatch(fetchProgramariStarted);
-    const collection = moment(payload.selectedDate).format("DDMMY");
+    dispatch({ type: FETCH_PROGRAMARI_STARTED });
+    const collection = moment(payload).format("DDMMY");
     const url = `http://localhost:3001/${collection}`;
     axios.get(url).then(res => {
-      dispatch(fetchProgramariSuccess(res.data));
+      dispatch({ type: FETCH_PROGRAMARI_SUCCESS, payload: res.data });
     });
   };
 }
-
-const fetchProgramariSuccess = data => ({
-  type: FETCH_PROGRAMARI_SUCCESS,
-  payload: {
-    programari: [...data]
-  }
-});
-
-const fetchProgramariStarted = () => ({
-  type: FETCH_PROGRAMARI_STARTED
-});

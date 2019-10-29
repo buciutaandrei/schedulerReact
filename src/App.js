@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.css";
 import DatePicker from "./Components/DatePicker/DatePicker.js";
 import "tachyons";
@@ -16,18 +16,14 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
   return {
-    loading: state.loading
+    //loading: state.loading
   };
 };
 
 const App = props => {
-  useEffect(() => {
-    console.log("asdasd");
-  }, []);
-
   return (
     <React.Fragment>
-      <LoadingOverlay active={props.loading} spinner>
+      <LoadingOverlay active={false} spinner>
         <CssBaseline />
         <div className="appWrapper flex flex-wrap">
           <DatePicker />

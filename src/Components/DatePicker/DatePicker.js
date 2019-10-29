@@ -23,9 +23,8 @@ const mapStateToProps = state => {
 
 const DatePicker = props => {
   const handleDateSelect = event => {
-    const selectedDate = event;
-    props.selectDate({ selectedDate });
-    props.fetchProgramari({ selectedDate });
+    props.selectDate(event);
+    props.fetchProgramari(event);
   };
 
   return (

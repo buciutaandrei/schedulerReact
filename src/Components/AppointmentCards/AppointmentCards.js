@@ -34,16 +34,19 @@ const AppointmentCards = props => {
     selectedDate,
     deleteProgramare,
     adding,
-    loading,
     deleting
   } = props;
 
   useEffect(() => {
     props.fetchProgramari(selectedDate);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [adding, loading, deleting]);
+  }, [adding, deleting]);
 
-  console.log("cards");
+  const handleEdit = event => {
+    props.toggleAddModal(
+      Object.assign({}, event, { edit: true, editDate: event.selectedDate })
+    );
+  };
 
   const handleDelete = event => {
     const payload = Object.assign(
@@ -51,8 +54,7 @@ const AppointmentCards = props => {
       { selectedDate: selectedDate },
       { id: event }
     );
-    console.log(payload);
-    deleteProgramare({ ...payload });
+    deleteProgramare(payload);
   };
 
   const array = programari.map(programare => {
@@ -75,7 +77,7 @@ const AppointmentCards = props => {
         {durata > 1 ? <br /> : " "}
         {programare.medic}
         <div className="editIcon">
-          <EditIcon onClick={() => props.toggleAddModal(programare)} />
+          <EditIcon onClick={() => handleEdit(programare)} />
         </div>
         <div className="deleteIcon">
           <DeleteIcon onClick={() => handleDelete(`${programare.index}`)} />

@@ -36,7 +36,7 @@ const AppointmentTable = props => {
   }, []);
 
   const modalToggle = event => {
-    props.toggleAddModal(props.selectedProgramare);
+    props.toggleAddModal(event);
     if (
       event !== undefined &&
       props.modalToggled === false &&
@@ -50,8 +50,7 @@ const AppointmentTable = props => {
     }
   };
 
-  //const { loading, adding, deleting } = this.props;
-  //let loadingState = loading || adding || deleting;
+  const emptyState = { pacient: "" };
 
   return (
     <React.Fragment>
@@ -88,7 +87,7 @@ const AppointmentTable = props => {
           backgroundColor: "#357edd",
           color: "white"
         }}
-        onClick={modalToggle}
+        onClick={() => modalToggle(emptyState)}
       >
         <AddIcon />
       </Fab>
