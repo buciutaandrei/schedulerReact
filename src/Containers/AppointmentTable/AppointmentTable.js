@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import "./AppointmentTable.css";
 import { connect } from "react-redux";
-import { selectProgramare } from "../../actions/index";
+import { selectProgramare, toggleAddModal } from "../../actions/index";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import AppointmentCards from "../../Components/AppointmentCards/AppointmentCards";
@@ -15,7 +15,8 @@ import { fetchProgramari } from "../../actions/index";
 const mapDispatchToProps = dispatch => {
   return {
     selectProgramare: programare => dispatch(selectProgramare(programare)),
-    fetchProgramari: programare => dispatch(fetchProgramari(programare))
+    fetchProgramari: programare => dispatch(fetchProgramari(programare)),
+    toggleAddModal: toggleModal => dispatch(toggleAddModal(toggleModal))
   };
 };
 
@@ -24,116 +25,76 @@ const mapStateToProps = state => {
     selectedDate: state.selectedDate,
     selectedProgramare: state.selectedProgramare,
     programari: state.programari,
-    adding: state.adding,
-    loading: state.loading,
-    deleting: state.deleting
+    modalState: state.modalState
   };
 };
 
-class AppointmentTable extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      modalToggled: false,
-      idProgramare: "",
-      pacient: ""
-    };
-  }
+const AppointmentTable = props => {
+  useEffect(() => {
+    props.fetchProgramari(props.selectedDate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    UNSAFE_componentWillMount() {
-    this.props.fetchProgramari(this.props.selectedDate);
-  }
-
-  handleChange = event => {
-    let target = event.target.id;
-    let value = event.target.value;
-    this.setState({ [target]: value });
-  };
-
-  modalToggle = event => {
-    this.setState({ modalToggled: !this.state.modalToggled });
+  const modalToggle = event => {
+    props.toggleAddModal(props.selectedProgramare);
     if (
       event !== undefined &&
-      this.state.modalToggled === false &&
-      this.props.programari.length > 0
+      props.modalToggled === false &&
+      props.programari.length > 0
     ) {
-      let indexProgramare = this.props.programari
+      let indexProgramare = props.programari
         .map(props => props.index)
         .indexOf(event.target.id);
-      let programare = this.props.programari[indexProgramare];
-      this.props.selectProgramare({ ...programare });
+      let programare = props.programari[indexProgramare];
+      props.selectProgramare({ ...programare });
     }
   };
 
-  render() {
+  //const { loading, adding, deleting } = this.props;
+  //let loadingState = loading || adding || deleting;
 
-
-    const { loading, adding, deleting } = this.props;
-    let loadingState = loading || adding || deleting;
-  
-
-    return (
-      <React.Fragment>
-        <AddAppointment
-          modalToggle={this.modalToggle}
-          modalToggled={this.state.modalToggled}
-          idProgramare={this.state.idProgramare}
-          pacient={this.state.pacient}
-          handleChange={this.handleChange}
-        />
-        <div className="tableWrapper">
-          <div
-            style={{
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              zIndex: "-10"
-            }}
-          >
-            <TableBackground />
-          </div>
-          <HourRows />
-          <div
-            className="tc"
-            style={{ gridColumnStart: "2", gridRowStart: "1" }}
-          >
-            Cabinetul 1
-          </div>
-          <div
-            className="tc"
-            style={{ gridColumnStart: "3", gridRowStart: "1" }}
-          >
-            Cabinetul 2
-          </div>
-          <div
-            className="tc"
-            style={{ gridColumnStart: "4", gridRowStart: "1" }}
-          >
-            Cabinetul 3
-          </div>
-          {!loadingState ? (
-            <AppointmentCards modalToggle={this.modalToggle} />
-          ) : (
-            null
-          )}
-        </div>
-        <Fab
-          aria-label="add"
+  return (
+    <React.Fragment>
+      <AddAppointment />
+      <div className="tableWrapper">
+        <div
           style={{
             position: "absolute",
-            marginTop: "91vh",
-            marginLeft: "96vw",
-            backgroundColor: "#357edd",
-            color: "white"
+            width: "100%",
+            height: "100%",
+            zIndex: "-10"
           }}
-          onClick={this.modalToggle}
         >
-          <AddIcon />
-        </Fab>
-      </React.Fragment>
-    );
-  }
-}
+          <TableBackground />
+        </div>
+        <HourRows />
+        <div className="tc" style={{ gridColumnStart: "2", gridRowStart: "1" }}>
+          Cabinetul 1
+        </div>
+        <div className="tc" style={{ gridColumnStart: "3", gridRowStart: "1" }}>
+          Cabinetul 2
+        </div>
+        <div className="tc" style={{ gridColumnStart: "4", gridRowStart: "1" }}>
+          Cabinetul 3
+        </div>
+        <AppointmentCards />
+      </div>
+      <Fab
+        aria-label="add"
+        style={{
+          position: "absolute",
+          marginTop: "91vh",
+          marginLeft: "96vw",
+          backgroundColor: "#357edd",
+          color: "white"
+        }}
+        onClick={modalToggle}
+      >
+        <AddIcon />
+      </Fab>
+    </React.Fragment>
+  );
+};
 
 export default connect(
   mapStateToProps,

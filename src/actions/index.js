@@ -8,9 +8,15 @@ import {
   ADD_PROGRAMARE_STARTED,
   ADD_PROGRAMARE_SUCCESS,
   DELETE_PROGRAMARE_STARTED,
-  DELETE_PROGRAMARE_SUCCESS
+  DELETE_PROGRAMARE_SUCCESS,
+  TOGGLE_ADD_MODAL
 } from "../constants/action-types";
 import moment from "moment";
+
+export function toggleAddModal(payload) {
+  console.log(payload);
+  return { type: TOGGLE_ADD_MODAL, payload };
+}
 
 export function deleteProgramare(payload) {
   const collection = moment(payload.selectedDate).format("DDMMY");

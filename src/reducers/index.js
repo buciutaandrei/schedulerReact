@@ -7,16 +7,18 @@ import {
   ADD_PROGRAMARE_SUCCESS,
   ADD_PROGRAMARE_STARTED,
   DELETE_PROGRAMARE_STARTED,
-  DELETE_PROGRAMARE_SUCCESS
+  DELETE_PROGRAMARE_SUCCESS,
+  TOGGLE_ADD_MODAL
 } from "../constants/action-types";
 
 const initialState = {
+  modalState: false,
   deleting: false,
   adding: false,
   loading: true,
   selectedDate: new Date(),
   formChange: {},
-  selectedProgramare: [],
+  selectedProgramare: {},
   programari: []
 };
 
@@ -26,12 +28,19 @@ function rootReducer(state = initialState, action) {
   }
 
   switch (action.type) {
+    case TOGGLE_ADD_MODAL: {
+      return Object.assign(
+        {},
+        state,
+        { selectedProgramare: action.payload },
+        { modalState: !state.modalState }
+      );
+    }
     case DELETE_PROGRAMARE_STARTED: {
       return Object.assign({}, state, {
         deleting: true
       });
     }
-
     case DELETE_PROGRAMARE_SUCCESS: {
       return Object.assign({}, state, { deleting: false });
     }

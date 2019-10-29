@@ -1,62 +1,69 @@
-import React, {Component} from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { hoursArray } from "../../Components/DataTables/hoursArray";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import "./AppointmentCards.css";
-import { deleteProgramare, fetchProgramari } from "../../actions/index";
+import {
+  deleteProgramare,
+  fetchProgramari,
+  toggleAddModal
+} from "../../actions/index";
 
 const mapStateToProps = state => {
   return {
     programari: state.programari,
-    selectedDate: state.selectedDate
+    selectedDate: state.selectedDate,
+    adding: state.adding,
+    loading: state.loading,
+    deleting: state.deleting
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     deleteProgramare: programare => dispatch(deleteProgramare(programare)),
-    fetchProgramari: programare => dispatch(fetchProgramari(programare))
+    fetchProgramari: programare => dispatch(fetchProgramari(programare)),
+    toggleAddModal: toggleModal => dispatch(toggleAddModal(toggleModal))
   };
-  };
+};
 
-class AppointmentCards extends Component {
+const AppointmentCards = props => {
+  const {
+    programari,
+    selectedDate,
+    deleteProgramare,
+    adding,
+    loading,
+    deleting
+  } = props;
 
+  useEffect(() => {
+    props.fetchProgramari(selectedDate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [adding, loading, deleting]);
 
-  UNSAFE_componentWillMount() {
-    this.props.fetchProgramari(this.props.selectedDate);
-  }
+  console.log("cards");
 
-  componentWillUnmount() {
-    console.log("unmounting")
-  }
-
-  handleDelete = event => {
+  const handleDelete = event => {
     const payload = Object.assign(
       {},
-      { selectedDate: this.props.selectedDate },
+      { selectedDate: selectedDate },
       { id: event }
     );
-    this.props.deleteProgramare({ ...payload });
+    console.log(payload);
+    deleteProgramare({ ...payload });
   };
 
-  render(){
-
-  const { programari, modalToggle } = this.props
-  
   const array = programari.map(programare => {
-    let oraProgramare = "";
-    programare.ora > 999
-      ? (oraProgramare = programare.ora)
-      : (oraProgramare = `0${programare.ora}`);
     let hourIndex = hoursArray.indexOf(Number(programare.ora)) + 1;
     let cabinetIndex = Number(programare.cabinet) + 1;
     let durata = programare.durata;
     let bgColor = `bg-${programare.medic}`;
     return (
       <div
-        id={`${programare.cabinet}${oraProgramare}`}
-        key={`${programare.cabinet}${oraProgramare}`}
+        id={`${programare.index}`}
+        key={`${programare.index}`}
         className={`programare pa2 tc dib black-90 shadow-4 ${bgColor}`}
         style={{
           gridColumn: cabinetIndex,
@@ -68,14 +75,10 @@ class AppointmentCards extends Component {
         {durata > 1 ? <br /> : " "}
         {programare.medic}
         <div className="editIcon">
-          <EditIcon onClick={modalToggle} />
+          <EditIcon onClick={() => props.toggleAddModal(programare)} />
         </div>
         <div className="deleteIcon">
-          <DeleteIcon
-            onClick={() =>
-              this.handleDelete(`${programare.cabinet}${oraProgramare}`)
-            }
-          />
+          <DeleteIcon onClick={() => handleDelete(`${programare.index}`)} />
         </div>
       </div>
     );
@@ -83,7 +86,7 @@ class AppointmentCards extends Component {
 
   return <React.Fragment>{array}</React.Fragment>;
 };
-}
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
