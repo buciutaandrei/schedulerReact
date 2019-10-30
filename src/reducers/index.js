@@ -5,11 +5,14 @@ import {
   SELECT_EDIT_DATE,
   FETCH_PROGRAMARI_SUCCESS,
   FETCH_PROGRAMARI_STARTED,
+  FETCH_EDIT_PROGRAMARI_SUCCESS,
+  FETCH_EDIT_PROGRAMARI_STARTED,
   ADD_PROGRAMARE_SUCCESS,
   ADD_PROGRAMARE_STARTED,
   DELETE_PROGRAMARE_STARTED,
   DELETE_PROGRAMARE_SUCCESS,
-  TOGGLE_ADD_MODAL
+  TOGGLE_ADD_MODAL,
+  ADD_HOURS_ARRAY
 } from "../constants/action-types";
 
 const initialState = {
@@ -67,11 +70,30 @@ function rootReducer(state = initialState, action) {
     }
 
     case FETCH_PROGRAMARI_SUCCESS: {
-      return Object.assign({}, state, { programari: action.payload}, { loading: false });
+      return Object.assign(
+        {},
+        state,
+        { programari: action.payload },
+        { loading: false }
+      );
     }
 
     case FETCH_PROGRAMARI_STARTED: {
       return Object.assign({}, state, { loading: true });
+    }
+
+    case FETCH_EDIT_PROGRAMARI_SUCCESS: {
+      return Object.assign({}, state, { programariEdit: action.payload });
+    }
+
+    case FETCH_EDIT_PROGRAMARI_STARTED: {
+      return Object.assign({}, state);
+    }
+
+    case ADD_HOURS_ARRAY: {
+      const newState = Object.assign({}, state, { hoursArray: "" });
+      console.log(newState);
+      return Object.assign({}, newState, { hoursArray: action.payload });
     }
 
     case ADD_PROGRAMARE_SUCCESS: {

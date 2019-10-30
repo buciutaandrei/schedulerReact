@@ -28,11 +28,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 const AppointmentCards = props => {
-  const {
-    programari,
-    selectedDate,
-    deleteProgramare,
-  } = props;
+  const { programari, selectedDate, deleteProgramare } = props;
 
   const handleEdit = event => {
     props.toggleAddModal(
@@ -47,7 +43,7 @@ const AppointmentCards = props => {
       { id: event }
     );
     deleteProgramare(payload);
-    props.fetchProgramari(selectedDate);
+    setTimeout(() => props.fetchProgramari(selectedDate), 100);
   };
 
   const array = programari.map(programare => {

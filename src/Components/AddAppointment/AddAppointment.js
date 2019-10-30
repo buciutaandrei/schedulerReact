@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import "./AddAppointment.css";
 import {
@@ -6,7 +6,9 @@ import {
   handleFormChange,
   toggleAddModal,
   deleteProgramare,
-  fetchProgramari
+  fetchProgramari,
+  fetchEditProgramari,
+  addHoursArray
 } from "../../actions/index";
 import { hourDropdownList } from "../DataTables/hoursArray";
 import {
@@ -30,9 +32,12 @@ const mapDispatchToProps = dispatch => {
   return {
     addProgramare: programare => dispatch(addProgramare(programare)),
     fetchProgramari: programari => dispatch(fetchProgramari(programari)),
+    fetchEditProgramari: programari =>
+      dispatch(fetchEditProgramari(programari)),
     handleFormChange: formChange => dispatch(handleFormChange(formChange)),
     toggleAddModal: toggleModal => dispatch(toggleAddModal(toggleModal)),
-    deleteProgramare: programare => dispatch(deleteProgramare(programare))
+    deleteProgramare: programare => dispatch(deleteProgramare(programare)),
+    addHoursArray: hours => dispatch(addHoursArray(hours))
   };
 };
 
@@ -42,16 +47,23 @@ const mapStateToProps = state => {
     selectedProgramare: state.selectedProgramare,
     modalState: state.modalState,
     selectedDate: state.selectedDate,
-    adding: state.adding
+    adding: state.adding,
+    programariEdit: state.programariEdit,
+    hoursArray: state.hoursArray
   };
 };
 
 const AddAppointment = props => {
+  useEffect(() => {
+    props.fetchEditProgramari(props.selectedDate);
+  }, []);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
-  
+
   const handleDateSelect = event => {
     setSelectedDate(event);
+    props.handleFormChange({ cabinet: "" });
+    props.fetchEditProgramari(event);
   };
 
   const handleChange = event => {
@@ -60,6 +72,43 @@ const AddAppointment = props => {
     let payload = { [target]: value };
     props.handleFormChange({ ...payload });
   };
+
+  const busyHours = event => {
+    let busyHoursArray = [];
+    let availableHoursArray = [];
+    let target = event.target.id;
+    let value = event.target.value;
+    if (target === "cabinet") {
+      props.programariEdit.map(programare => {
+        if (value === programare.cabinet) {
+          const startTime = moment(programare.ora, "Hmm").subtract(10, "m");
+          const endTime = moment(programare.ora, "Hmm")
+            .add(programare.durata * 0.5, "h")
+            .subtract(10, "m");
+          const intervals = { startTime: startTime, endTime: endTime };
+          busyHoursArray = busyHoursArray.concat(intervals);
+        }
+      });
+    }
+
+    hourDropdownList.map(hours => {
+      busyHoursArray.map(availableHours => {
+        const busy = moment(hours.value, "Hmm").isBetween(
+          availableHours.startTime,
+          availableHours.endTime
+        );
+        if (!busy) {
+          availableHoursArray = availableHoursArray.concat(hours);
+        }
+      });
+    });
+    props.addHoursArray(availableHoursArray);
+  };
+
+  console.log("a");
+  console.log(props.hoursArray);
+  console.log("b");
+  console.log(hourDropdownList);
 
   const addProgramare = () => {
     let programare = props.selectedProgramare;
@@ -79,9 +128,9 @@ const AddAppointment = props => {
   const programareDelete = () => {
     const { editDate, index } = props.selectedProgramare;
     const payload = Object.assign(
-      {}, 
-      {selectedDate: editDate},
-      {id: index}
+      {},
+      { selectedDate: editDate },
+      { id: index }
     );
     props.deleteProgramare(payload);
   };
@@ -89,7 +138,7 @@ const AddAppointment = props => {
   const submitClick = () => {
     if (props.selectedProgramare.edit) {
       programareDelete();
-      addProgramare();
+      setTimeout(() => addProgramare(), 100);
     } else {
       addProgramare();
     }
@@ -124,6 +173,13 @@ const AddAppointment = props => {
         <ModalHeader>Programare</ModalHeader>
         <ModalBody>
           <div className="addAppointmentForm">
+            <DayPicker
+              localeUtils={MomentLocaleUtils}
+              locale="ro"
+              selectedDays={selectedDate}
+              onDayClick={event => handleDateSelect(event)}
+              disabledDays={{ daysOfWeek: [0, 6] }}
+            />
             <Form>
               <FormInput
                 id="pacient"
@@ -142,7 +198,7 @@ const AddAppointment = props => {
               <Dropdown
                 id="ora"
                 value={selectedProgramare.ora}
-                options={hourDropdownList}
+                options={props.hoursArray}
                 onChange={handleChange}
                 placeholder="Alege ora"
               />
@@ -150,7 +206,10 @@ const AddAppointment = props => {
                 id="cabinet"
                 value={selectedProgramare.cabinet}
                 options={cabinetList}
-                onChange={handleChange}
+                onChange={event => {
+                  handleChange(event);
+                  busyHours(event);
+                }}
                 placeholder="Alege cabinetul"
               />
               <Dropdown
@@ -161,13 +220,6 @@ const AddAppointment = props => {
                 placeholder="Alege durata"
               />
             </Form>
-            <DayPicker
-              localeUtils={MomentLocaleUtils}
-              locale="ro"
-              selectedDays={selectedDate}
-              onDayClick={event => handleDateSelect(event)}
-              disabledDays={{ daysOfWeek: [0, 6] }}
-            />
           </div>
           <Button onClick={submitClick}>Save</Button>
         </ModalBody>

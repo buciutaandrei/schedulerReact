@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import "./AppointmentTable.css";
 import { connect } from "react-redux";
-import { selectProgramare, toggleAddModal } from "../../actions/index";
+import {
+  selectProgramare,
+  toggleAddModal,
+  fetchEditProgramari
+} from "../../actions/index";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import AppointmentCards from "../../Components/AppointmentCards/AppointmentCards";
@@ -16,6 +20,8 @@ const mapDispatchToProps = dispatch => {
   return {
     selectProgramare: programare => dispatch(selectProgramare(programare)),
     fetchProgramari: programare => dispatch(fetchProgramari(programare)),
+    fetchEditProgramari: programare =>
+      dispatch(fetchEditProgramari(programare)),
     toggleAddModal: toggleModal => dispatch(toggleAddModal(toggleModal))
   };
 };
@@ -47,6 +53,7 @@ const AppointmentTable = props => {
         .indexOf(event.target.id);
       let programare = props.programari[indexProgramare];
       props.selectProgramare({ ...programare });
+      props.fetchEditProgramari(props.selectedDate);
     }
   };
 
