@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { hoursArray } from "../../Components/DataTables/hoursArray";
 import DeleteIcon from "@material-ui/icons/Delete";

@@ -23,6 +23,7 @@ export function selectEditDate(payload) {
 }
 
 export function deleteProgramare(payload) {
+  console.log('deleting')
   const collection = moment(payload.selectedDate).format("DDMMY");
   return dispatch => {
     dispatch({type: DELETE_PROGRAMARE_STARTED});
@@ -36,6 +37,7 @@ export function deleteProgramare(payload) {
 }
 
 export function addProgramare(payload) {
+  console.log('adding')
   const collection = moment(payload.selectedDate).format("DDMMY");
   return dispatch => {
     dispatch(addProgramareStarted);
@@ -67,6 +69,7 @@ export function selectDate(payload) {
 }
 
 export function fetchProgramari(payload) {
+  console.log('fetching')
   return dispatch => {
     dispatch({ type: FETCH_PROGRAMARI_STARTED });
     const collection = moment(payload).format("DDMMY");

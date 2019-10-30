@@ -41,11 +41,13 @@ const mapStateToProps = state => {
     programari: state.programari,
     selectedProgramare: state.selectedProgramare,
     modalState: state.modalState,
-    selectedDate: state.selectedDate
+    selectedDate: state.selectedDate,
+    adding: state.adding
   };
 };
 
 const AddAppointment = props => {
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   
   const handleDateSelect = event => {
@@ -70,8 +72,8 @@ const AddAppointment = props => {
     });
     props.handleFormChange({ index: index });
     props.addProgramare(programare);
-    props.fetchProgramari(props.selectedDate);
     props.toggleAddModal(programare);
+    setTimeout(() => props.fetchProgramari(props.selectedDate), 100);
   };
 
   const programareDelete = () => {
