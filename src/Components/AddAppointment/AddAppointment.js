@@ -5,7 +5,8 @@ import {
   addProgramare,
   handleFormChange,
   toggleAddModal,
-  deleteProgramare
+  deleteProgramare,
+  fetchProgramari
 } from "../../actions/index";
 import { hourDropdownList } from "../DataTables/hoursArray";
 import {
@@ -28,6 +29,7 @@ import "moment/locale/ro";
 const mapDispatchToProps = dispatch => {
   return {
     addProgramare: programare => dispatch(addProgramare(programare)),
+    fetchProgramari: programari => dispatch(fetchProgramari(programari)),
     handleFormChange: formChange => dispatch(handleFormChange(formChange)),
     toggleAddModal: toggleModal => dispatch(toggleAddModal(toggleModal)),
     deleteProgramare: programare => dispatch(deleteProgramare(programare))
@@ -38,13 +40,14 @@ const mapStateToProps = state => {
   return {
     programari: state.programari,
     selectedProgramare: state.selectedProgramare,
-    modalState: state.modalState
+    modalState: state.modalState,
+    selectedDate: state.selectedDate
   };
 };
 
 const AddAppointment = props => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-
+  
   const handleDateSelect = event => {
     setSelectedDate(event);
   };
@@ -67,22 +70,24 @@ const AddAppointment = props => {
     });
     props.handleFormChange({ index: index });
     props.addProgramare(programare);
+    props.fetchProgramari(props.selectedDate);
     props.toggleAddModal(programare);
   };
 
   const programareDelete = () => {
     const { editDate, index } = props.selectedProgramare;
-    const payload = {
-      selectedDate: editDate,
-      id: index
-    };
-    deleteProgramare(payload);
-    addProgramare();
+    const payload = Object.assign(
+      {}, 
+      {selectedDate: editDate},
+      {id: index}
+    );
+    props.deleteProgramare(payload);
   };
 
   const submitClick = () => {
     if (props.selectedProgramare.edit) {
       programareDelete();
+      addProgramare();
     } else {
       addProgramare();
     }

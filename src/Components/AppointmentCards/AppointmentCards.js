@@ -15,7 +15,6 @@ const mapStateToProps = state => {
     programari: state.programari,
     selectedDate: state.selectedDate,
     adding: state.adding,
-    loading: state.loading,
     deleting: state.deleting
   };
 };
@@ -23,7 +22,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     deleteProgramare: programare => dispatch(deleteProgramare(programare)),
-    fetchProgramari: programare => dispatch(fetchProgramari(programare)),
+    fetchProgramari: programari => dispatch(fetchProgramari(programari)),
     toggleAddModal: toggleModal => dispatch(toggleAddModal(toggleModal))
   };
 };
@@ -33,14 +32,7 @@ const AppointmentCards = props => {
     programari,
     selectedDate,
     deleteProgramare,
-    adding,
-    deleting
   } = props;
-
-  useEffect(() => {
-    props.fetchProgramari(selectedDate);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [adding, deleting]);
 
   const handleEdit = event => {
     props.toggleAddModal(
@@ -55,6 +47,7 @@ const AppointmentCards = props => {
       { id: event }
     );
     deleteProgramare(payload);
+    props.fetchProgramari(selectedDate);
   };
 
   const array = programari.map(programare => {

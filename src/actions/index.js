@@ -23,31 +23,22 @@ export function selectEditDate(payload) {
 }
 
 export function deleteProgramare(payload) {
-  console.log("delete");
   const collection = moment(payload.selectedDate).format("DDMMY");
-  console.log(collection);
   return dispatch => {
-    dispatch({ type: DELETE_PROGRAMARE_SUCCESS });
+    dispatch({type: DELETE_PROGRAMARE_STARTED});
     const url = `http://localhost:3001/${collection}`;
     axios({
       method: "delete",
       url: url,
-      data: payload
-    }).then(res => {
-      dispatch(deleteProgramareSuccess(res.data));
-    });
+      data: {id: payload.id}
+    }).then(dispatch({ type: DELETE_PROGRAMARE_SUCCESS}));
   };
 }
 
-const deleteProgramareStarted = () => ({
-  type: DELETE_PROGRAMARE_STARTED
-});
-
 export function addProgramare(payload) {
-  console.log("add");
   const collection = moment(payload.selectedDate).format("DDMMY");
   return dispatch => {
-    dispatch({ type: ADD_PROGRAMARE_STARTED });
+    dispatch(addProgramareStarted);
     const url = `http://localhost:3001/${collection}`;
     axios({
       method: "post",
@@ -58,6 +49,10 @@ export function addProgramare(payload) {
     });
   };
 }
+
+const addProgramareStarted = () => ({
+  type: ADD_PROGRAMARE_STARTED
+})
 
 export function selectProgramare(payload) {
   return { type: SELECT_PROGRAMARE, payload };

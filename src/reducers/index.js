@@ -42,11 +42,9 @@ function rootReducer(state = initialState, action) {
       );
     }
     case DELETE_PROGRAMARE_STARTED: {
-      console.log("started delete");
       return Object.assign({}, state, { deleting: true });
     }
     case DELETE_PROGRAMARE_SUCCESS: {
-      console.log(action.payload);
       return Object.assign({}, state, { deleting: false });
     }
     case ADD_PROGRAMARE_STARTED: {
@@ -69,11 +67,10 @@ function rootReducer(state = initialState, action) {
     }
 
     case FETCH_PROGRAMARI_SUCCESS: {
-      return Object.assign({}, state, action.payload, { loading: false });
+      return Object.assign({}, state, { programari: action.payload}, { loading: false });
     }
 
     case FETCH_PROGRAMARI_STARTED: {
-      console.log("fetch start");
       return Object.assign({}, state, { loading: true });
     }
 
