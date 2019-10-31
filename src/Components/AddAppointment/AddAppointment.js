@@ -61,6 +61,12 @@ const AddAppointment = props => {
 
   const [selectedDate, setSelectedDate] = useState(new Date());
 
+  const { pacient, ora, durata, medic, cabinet} = props.selectedProgramare
+  console.log(pacient === undefined || pacient === '' || ora ===undefined  || durata === undefined || medic === undefined || cabinet === undefined)
+  console.log(props.selectedProgramare)
+
+  const disabled = (pacient === undefined || pacient === '' || ora === undefined || ora === ''  || durata === undefined || medic === undefined || cabinet === undefined || cabinet === "");
+
   const handleDateSelect = event => {
     setSelectedDate(event);
     props.handleFormChange({ cabinet: "" });
@@ -74,11 +80,11 @@ const AddAppointment = props => {
     props.handleFormChange({ ...payload });
   };
 
-  const busyHours = event => {
+  const busyHours = value => {
+    props.handleFormChange({ ora: ''})
     let busyHoursArray = [];
     let availableHoursArray = [];
     let availableHoursList = [];
-    let value = event.target.value;
     props.programariEdit.map(programare => {
       if (value === programare.cabinet) {
         const startTime = moment(programare.ora, "Hmm").format('HH:mm');
@@ -204,7 +210,7 @@ const AddAppointment = props => {
                 options={cabinetList}
                 onChange={event => {
                   handleChange(event);
-                  busyHours(event);
+                  busyHours(event.target.value);
                   console.log('change')
                 }}
                 placeholder="Alege cabinetul"
@@ -218,7 +224,7 @@ const AddAppointment = props => {
               />
             </Form>
           </div>
-          <Button onClick={submitClick}>Save</Button>
+          <Button disabled={disabled} onClick={submitClick}>Save</Button>
         </ModalBody>
       </Modal>
     </div>

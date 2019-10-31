@@ -22,7 +22,7 @@ const initialState = {
   loading: true,
   selectedDate: new Date(),
   formChange: {},
-  selectedProgramare: { pacient: "" },
+  selectedProgramare: {},
   programari: []
 };
 

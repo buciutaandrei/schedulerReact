@@ -28,11 +28,12 @@ const mapDispatchToProps = dispatch => {
 };
 
 const AppointmentCards = props => {
+
   const { programari, selectedDate, deleteProgramare } = props;
 
   const handleEdit = event => {
     props.toggleAddModal(
-      Object.assign({}, event, { edit: true, editDate: event.selectedDate })
+      Object.assign({}, event, { edit: true, editDate: event.selectedDate, cabinet: '' })
     );
   };
 
