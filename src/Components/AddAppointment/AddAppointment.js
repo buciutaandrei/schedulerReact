@@ -10,7 +10,7 @@ import {
   fetchEditProgramari,
   addHoursArray
 } from "../../actions/index";
-import { hourDropdownList, hoursArray } from "../DataTables/hoursArray";
+import { hoursArray } from "../DataTables/hoursArray";
 import {
   Form,
   FormInput,
@@ -56,6 +56,7 @@ const mapStateToProps = state => {
 const AddAppointment = props => {
   useEffect(() => {
     props.fetchEditProgramari(props.selectedDate);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -77,27 +78,27 @@ const AddAppointment = props => {
     let busyHoursArray = [];
     let availableHoursArray = [];
     let availableHoursList = [];
-    let target = event.target.id;
     let value = event.target.value;
-    if (target === "cabinet") {
-      props.programariEdit.map(programare => {
-        if (value === programare.cabinet) {
-          const startTime = moment(programare.ora, "Hmm").format('HH:mm');
-          for (let i=0; i < programare.durata; i++) {
-          const busyHours = moment(startTime, 'HH:mm').add(i*0.5, 'h').format('Hmm')
-           busyHoursArray = busyHoursArray.concat(busyHours)
-          }
+    props.programariEdit.map(programare => {
+      if (value === programare.cabinet) {
+        const startTime = moment(programare.ora, "Hmm").format('HH:mm');
+        for (let i=0; i < programare.durata; i++) {
+        const busyHours = moment(startTime, 'HH:mm').add(i*0.5, 'h').format('Hmm')
+         busyHoursArray = busyHoursArray.concat(busyHours)
         }
-      });
-      const array = busyHoursArray.map(hour => Number(hour))
-      array.push(0)
-      const temp = new Set(array)
-      availableHoursArray = [...new Set([...hoursArray].filter(x => !temp.has(x)))]
-    } 
+      }
+      return null;
+    });
+    const array = busyHoursArray.map(hour => Number(hour))
+    array.push(0)
+    const temp = new Set(array)
+    availableHoursArray = [...new Set([...hoursArray].filter(x => !temp.has(x)))]
     availableHoursArray.map(hour => {
       const item = {label: moment(hour, 'Hmm').format("HH:mm"), value: moment(hour, 'Hmm').format("Hmm")}
       availableHoursList.push(item)
+      return null;
     })
+    console.log(availableHoursArray)
     props.addHoursArray(availableHoursList)
   };
 
@@ -113,6 +114,7 @@ const AddAppointment = props => {
     props.handleFormChange({ index: index });
     props.addProgramare(programare);
     props.toggleAddModal(programare);
+    props.addHoursArray([])
     setTimeout(() => props.fetchProgramari(props.selectedDate), 100);
   };
 
@@ -130,8 +132,11 @@ const AddAppointment = props => {
     if (props.selectedProgramare.edit) {
       programareDelete();
       setTimeout(() => addProgramare(), 100);
+      setTimeout(() => props.fetchEditProgramari(props.selectedDate), 100);
+
     } else {
       addProgramare();
+      setTimeout(() => props.fetchEditProgramari(props.selectedDate), 100);
     }
   };
 
@@ -200,6 +205,7 @@ const AddAppointment = props => {
                 onChange={event => {
                   handleChange(event);
                   busyHours(event);
+                  console.log('change')
                 }}
                 placeholder="Alege cabinetul"
               />

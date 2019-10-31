@@ -46,11 +46,29 @@ const AppointmentCards = props => {
     setTimeout(() => props.fetchProgramari(selectedDate), 100);
   };
 
+  const doctorName = data => {
+    switch (data) {
+      case 'red': {
+        return 'dr. A'
+      }
+      case 'green': {
+        return 'dr. B'
+      }
+      case 'blue': {
+        return 'dr. C'
+      }
+      default:
+        return 'no medic'
+    }
+
+  }
+
   const array = programari.map(programare => {
     let hourIndex = hoursArray.indexOf(Number(programare.ora)) + 1;
     let cabinetIndex = Number(programare.cabinet) + 1;
     let durata = programare.durata;
     let bgColor = `bg-${programare.medic}`;
+    const medic = doctorName(programare.medic)
     return (
       <div
         id={`${programare.index}`}
@@ -64,7 +82,7 @@ const AppointmentCards = props => {
       >
         {programare.pacient}
         {durata > 1 ? <br /> : " "}
-        {programare.medic}
+        {medic}
         <div className="editIcon">
           <EditIcon onClick={() => handleEdit(programare)} />
         </div>
