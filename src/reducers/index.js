@@ -92,7 +92,6 @@ function rootReducer(state = initialState, action) {
 
     case ADD_HOURS_ARRAY: {
       const newState = Object.assign({}, state, { hoursArray: "" });
-      console.log(newState);
       return Object.assign({}, newState, { hoursArray: action.payload });
     }
 

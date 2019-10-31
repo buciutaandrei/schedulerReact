@@ -10,7 +10,7 @@ import {
   fetchEditProgramari,
   addHoursArray
 } from "../../actions/index";
-import { hourDropdownList } from "../DataTables/hoursArray";
+import { hourDropdownList, hoursArray } from "../DataTables/hoursArray";
 import {
   Form,
   FormInput,
@@ -76,39 +76,30 @@ const AddAppointment = props => {
   const busyHours = event => {
     let busyHoursArray = [];
     let availableHoursArray = [];
+    let availableHoursList = [];
     let target = event.target.id;
     let value = event.target.value;
     if (target === "cabinet") {
       props.programariEdit.map(programare => {
         if (value === programare.cabinet) {
-          const startTime = moment(programare.ora, "Hmm").subtract(10, "m");
-          const endTime = moment(programare.ora, "Hmm")
-            .add(programare.durata * 0.5, "h")
-            .subtract(10, "m");
-          const intervals = { startTime: startTime, endTime: endTime };
-          busyHoursArray = busyHoursArray.concat(intervals);
+          const startTime = moment(programare.ora, "Hmm").format('HH:mm');
+          for (let i=0; i < programare.durata; i++) {
+          const busyHours = moment(startTime, 'HH:mm').add(i*0.5, 'h').format('Hmm')
+           busyHoursArray = busyHoursArray.concat(busyHours)
+          }
         }
       });
-    }
-
-    hourDropdownList.map(hours => {
-      busyHoursArray.map(availableHours => {
-        const busy = moment(hours.value, "Hmm").isBetween(
-          availableHours.startTime,
-          availableHours.endTime
-        );
-        if (!busy) {
-          availableHoursArray = availableHoursArray.concat(hours);
-        }
-      });
-    });
-    props.addHoursArray(availableHoursArray);
+      const array = busyHoursArray.map(hour => Number(hour))
+      array.push(0)
+      const temp = new Set(array)
+      availableHoursArray = [...new Set([...hoursArray].filter(x => !temp.has(x)))]
+    } 
+    availableHoursArray.map(hour => {
+      const item = {label: moment(hour, 'Hmm').format("HH:mm"), value: moment(hour, 'Hmm').format("Hmm")}
+      availableHoursList.push(item)
+    })
+    props.addHoursArray(availableHoursList)
   };
-
-  console.log("a");
-  console.log(props.hoursArray);
-  console.log("b");
-  console.log(hourDropdownList);
 
   const addProgramare = () => {
     let programare = props.selectedProgramare;
