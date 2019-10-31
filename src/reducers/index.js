@@ -12,7 +12,11 @@ import {
   DELETE_PROGRAMARE_STARTED,
   DELETE_PROGRAMARE_SUCCESS,
   TOGGLE_ADD_MODAL,
-  ADD_HOURS_ARRAY
+  ADD_HOURS_ARRAY,
+  USER_LOGGING_STARTED,
+  USER_LOGGING_SUCCESS,
+  USER_LOGGING_ERROR,
+  LOGGING_OUT
 } from "../constants/action-types";
 
 const initialState = {
@@ -23,7 +27,9 @@ const initialState = {
   selectedDate: new Date(),
   formChange: {},
   selectedProgramare: {},
-  programari: []
+  programari: [],
+  loggedIn: false,
+  loginErrors: {}
 };
 
 function rootReducer(state = initialState, action) {
@@ -32,6 +38,10 @@ function rootReducer(state = initialState, action) {
   }
 
   switch (action.type) {
+    case LOGGING_OUT: {
+      return Object.assign({}, state, { loggedIn: false });
+    }
+
     case SELECT_EDIT_DATE: {
       return Object.assign({}, state, action.payload);
     }
@@ -43,6 +53,16 @@ function rootReducer(state = initialState, action) {
         { selectedProgramare: action.payload },
         { modalState: !state.modalState }
       );
+    }
+
+    case USER_LOGGING_STARTED: {
+      return Object.assign({}, state, action.payload);
+    }
+    case USER_LOGGING_SUCCESS: {
+      return Object.assign({}, state, { loggedIn: true });
+    }
+    case USER_LOGGING_ERROR: {
+      return Object.assign({}, state, { loginErrors: action.payload });
     }
     case DELETE_PROGRAMARE_STARTED: {
       return Object.assign({}, state, { deleting: true });

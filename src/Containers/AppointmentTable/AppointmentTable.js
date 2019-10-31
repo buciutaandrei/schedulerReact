@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import "./AppointmentTable.css";
 import { connect } from "react-redux";
-import {
-  selectProgramare,
-  toggleAddModal,
-  fetchEditProgramari
-} from "../../actions/index";
+import { selectProgramare, fetchEditProgramari } from "../../actions/index";
 import AppointmentCards from "../../Components/AppointmentCards/AppointmentCards";
 import TableBackground from "../../Components/TableBackground/TableBackground";
 import HourRows from "../../Components/HourRows/HourRows";
@@ -18,8 +14,7 @@ const mapDispatchToProps = dispatch => {
   return {
     selectProgramare: programare => dispatch(selectProgramare(programare)),
     fetchProgramari: programare => dispatch(fetchProgramari(programare)),
-    fetchEditProgramari: programare =>
-      dispatch(fetchEditProgramari(programare)),
+    fetchEditProgramari: programare => dispatch(fetchEditProgramari(programare))
   };
 };
 
@@ -48,19 +43,28 @@ const AppointmentTable = props => {
             width: "100%",
             height: "100%",
             zIndex: "-10",
-            marginTop: '1.95rem'
+            marginTop: "1.95rem"
           }}
         >
           <TableBackground />
         </div>
         <HourRows />
-        <div className="f4 tc pa3" style={{ gridColumnStart: "2", gridRowStart: "1" }}>
+        <div
+          className="f4 tc pa3"
+          style={{ gridColumnStart: "2", gridRowStart: "1" }}
+        >
           Cabinetul 1
         </div>
-        <div className="f4 tc pa3" style={{ gridColumnStart: "3", gridRowStart: "1" }}>
+        <div
+          className="f4 tc pa3"
+          style={{ gridColumnStart: "3", gridRowStart: "1" }}
+        >
           Cabinetul 2
         </div>
-        <div className="f4 tc pa3" style={{ gridColumnStart: "4", gridRowStart: "1" }}>
+        <div
+          className="f4 tc pa3"
+          style={{ gridColumnStart: "4", gridRowStart: "1" }}
+        >
           Cabinetul 3
         </div>
         <AppointmentCards />

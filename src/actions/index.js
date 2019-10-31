@@ -13,9 +13,43 @@ import {
   DELETE_PROGRAMARE_STARTED,
   DELETE_PROGRAMARE_SUCCESS,
   TOGGLE_ADD_MODAL,
-  ADD_HOURS_ARRAY
+  ADD_HOURS_ARRAY,
+  USER_LOGGING_STARTED,
+  USER_LOGGING_SUCCESS,
+  USER_LOGGING_ERROR,
+  LOGGING_OUT
 } from "../constants/action-types";
 import moment from "moment";
+import setAuthToken from "../Components/LoginPage/setAuthToken";
+import jwt_decode from "jwt-decode";
+
+export function userLogging(payload) {
+  return dispatch => {
+    dispatch({ type: USER_LOGGING_STARTED });
+    axios
+      .post("http://localhost:3001/api/users/login", payload)
+      .then(res => {
+        const { token } = res.data;
+        localStorage.setItem("jwtToken", token);
+        setAuthToken(token);
+        const decoded = jwt_decode(token);
+        dispatch({ type: USER_LOGGING_SUCCESS, payload: decoded });
+      })
+      .catch(err =>
+        dispatch({ type: USER_LOGGING_ERROR, payload: err.response.data })
+      );
+  };
+}
+
+export function setUser(payload) {
+  return { type: USER_LOGGING_SUCCESS, payload };
+}
+
+export function loggingOut(payload) {
+  localStorage.removeItem("jwtToken");
+  setAuthToken(false);
+  return { type: LOGGING_OUT, payload };
+}
 
 export function toggleAddModal(payload) {
   return { type: TOGGLE_ADD_MODAL, payload };
@@ -29,7 +63,7 @@ export function deleteProgramare(payload) {
   const collection = moment(payload.selectedDate).format("DDMMY");
   return dispatch => {
     dispatch({ type: DELETE_PROGRAMARE_STARTED });
-    const url = `http://localhost:3001/${collection}`;
+    const url = `http://localhost:3001/database/${collection}`;
     axios({
       method: "delete",
       url: url,
@@ -42,7 +76,7 @@ export function addProgramare(payload) {
   const collection = moment(payload.selectedDate).format("DDMMY");
   return dispatch => {
     dispatch({ type: ADD_PROGRAMARE_STARTED });
-    const url = `http://localhost:3001/${collection}`;
+    const url = `http://localhost:3001/database/${collection}`;
     axios({
       method: "post",
       url: url,
@@ -73,7 +107,7 @@ export function fetchProgramari(payload) {
   return dispatch => {
     dispatch({ type: FETCH_PROGRAMARI_STARTED });
     const collection = moment(payload).format("DDMMY");
-    const url = `http://localhost:3001/${collection}`;
+    const url = `http://localhost:3001/database/${collection}`;
     axios.get(url).then(res => {
       dispatch({ type: FETCH_PROGRAMARI_SUCCESS, payload: res.data });
     });
@@ -84,7 +118,7 @@ export function fetchEditProgramari(payload) {
   return dispatch => {
     dispatch({ type: FETCH_EDIT_PROGRAMARI_STARTED });
     const collection = moment(payload).format("DDMMY");
-    const url = `http://localhost:3001/${collection}`;
+    const url = `http://localhost:3001/database/${collection}`;
     axios.get(url).then(res => {
       dispatch({ type: FETCH_EDIT_PROGRAMARI_SUCCESS, payload: res.data });
     });

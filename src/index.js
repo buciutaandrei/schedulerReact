@@ -6,6 +6,9 @@ import * as serviceWorker from "./serviceWorker";
 import "typeface-roboto";
 import { Provider } from "react-redux";
 import store from "./store/index.js";
+import setAuthToken from "./Components/LoginPage/setAuthToken";
+
+setAuthToken(localStorage.getItem("jwtToken"));
 
 ReactDOM.render(
   <Provider store={store}>
