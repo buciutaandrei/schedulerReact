@@ -70,20 +70,33 @@ const AppointmentCards = props => {
     let durata = programare.durata;
     let bgColor = `bg-${programare.medic}`;
     const medic = doctorName(programare.medic)
+    let style = {}
+    let cellStyle = {}
+    if (durata === '1') {
+      style = {display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridGap: '1px'}
+      console.log(style)
+    } else if (durata === '2') {
+      style = {display: 'grid', gridTemplateColumns: '50% 50%', height: '2rem'};
+      cellStyle ={gridColumn: '1 / span 2'}
+    } else {
+      style = {display: 'grid', gridTemplateRows: '1fr'}
+    }
     return (
       <div
         id={`${programare.index}`}
         key={`${programare.index}`}
-        className={`programare pa2 tc dib black-90 shadow-4 ${bgColor}`}
+        className={`programare pt1 tc dib black-90 shadow-4 ${bgColor}`}
         style={{
           gridColumn: cabinetIndex,
           gridRow: `${hourIndex} / span ${durata}`,
           zIndex: "20"
         }}
       >
-        {programare.pacient}
-        {durata > 1 ? <br /> : " "}
-        {medic}
+        <div style={style}>
+        <span style={{ textOverflow: 'hidden', height: '1rem', overflow: 'hidden'}}>{programare.nume} {programare.prenume}</span>
+        <span>{programare.telefon}</span>
+        <span style={cellStyle}>{medic}</span>
+        </div>
         <div className="editIcon">
           <EditIcon onClick={() => handleEdit(programare)} />
         </div>

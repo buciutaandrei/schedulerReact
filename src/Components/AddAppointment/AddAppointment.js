@@ -61,11 +61,9 @@ const AddAppointment = props => {
 
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const { pacient, ora, durata, medic, cabinet} = props.selectedProgramare
-  console.log(pacient === undefined || pacient === '' || ora ===undefined  || durata === undefined || medic === undefined || cabinet === undefined)
-  console.log(props.selectedProgramare)
+  const { nume, prenume, ora, durata, medic, cabinet} = props.selectedProgramare
 
-  const disabled = (pacient === undefined || pacient === '' || ora === undefined || ora === ''  || durata === undefined || medic === undefined || cabinet === undefined || cabinet === "");
+  const disabled = (nume === undefined || nume === '' || prenume === undefined || prenume === '' || ora === undefined || ora === ''  || durata === undefined || medic === undefined || cabinet === undefined || cabinet === "");
 
   const handleDateSelect = event => {
     setSelectedDate(event);
@@ -173,8 +171,8 @@ const AddAppointment = props => {
         size="lg"
       >
         <ModalHeader>Programare</ModalHeader>
-        <ModalBody>
-          <div className="addAppointmentForm">
+        <ModalBody style={{ padding: '0'}}>
+          <div className="addAppointmentForm pv4">
             <DayPicker
               localeUtils={MomentLocaleUtils}
               locale="ro"
@@ -182,13 +180,30 @@ const AddAppointment = props => {
               onDayClick={event => handleDateSelect(event)}
               disabledDays={{ daysOfWeek: [0, 6] }}
             />
-            <Form>
+            <Form className='flex flex-column pr5'>
               <FormInput
-                id="pacient"
+                id="nume"
                 placeholder="Nume"
-                value={selectedProgramare.pacient}
+                value={selectedProgramare.nume}
                 onChange={handleChange}
-                style={{ width: "300px" }}
+                className='ma2'
+                style={{ width: '200px' }}
+              />
+              <FormInput
+                id="prenume"
+                placeholder="Prenume"
+                value={selectedProgramare.prenume}
+                onChange={handleChange}
+                className='ma2'
+                style={{ width: '200px' }}
+              />
+              <FormInput
+                id="telefon"
+                placeholder="Telefon"
+                value={selectedProgramare.telefon}
+                onChange={handleChange}
+                className='ma2'
+                style={{ width: '200px' }}
               />
               <Dropdown
                 id="medic"
@@ -196,13 +211,8 @@ const AddAppointment = props => {
                 options={doctorList}
                 onChange={handleChange}
                 placeholder="Alege medicul"
-              />
-              <Dropdown
-                id="ora"
-                value={selectedProgramare.ora}
-                options={props.hoursArray}
-                onChange={handleChange}
-                placeholder="Alege ora"
+                className='ma2'
+                style={{ width: '200px' }}
               />
               <Dropdown
                 id="cabinet"
@@ -214,6 +224,17 @@ const AddAppointment = props => {
                   console.log('change')
                 }}
                 placeholder="Alege cabinetul"
+                className='ma2'
+                style={{ width: '200px' }}
+              />
+              <Dropdown
+                id="ora"
+                value={selectedProgramare.ora}
+                options={props.hoursArray}
+                onChange={handleChange}
+                placeholder="Alege ora"
+                className='ma2'
+                style={{ width: '200px' }}
               />
               <Dropdown
                 id="durata"
@@ -221,10 +242,12 @@ const AddAppointment = props => {
                 options={durataList}
                 onChange={handleChange}
                 placeholder="Alege durata"
+                className='ma2'
+                style={{ width: '200px' }}
               />
             </Form>
           </div>
-          <Button disabled={disabled} onClick={submitClick}>Save</Button>
+          <Button style={{ position: 'absolute', right: '20px', bottom: '20px'}} disabled={disabled} onClick={submitClick}>Save</Button>
         </ModalBody>
       </Modal>
     </div>
