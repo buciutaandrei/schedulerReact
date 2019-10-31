@@ -4,6 +4,7 @@
 }
 
 .tableWrapper {
+  margin-right: 13vw;
   position: relative;
   max-width: 50%;
   flex: 1;

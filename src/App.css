@@ -3,12 +3,14 @@
 }
 
 .appWrapper {
-  justify-content: space-around;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: center;
   width: 99.5%;
 }
 
 ._loading_overlay_wrapper{
+  display:flex;
+  align-content: center;
   height: 100vh;
   width: 100vw;
 }

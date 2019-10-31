@@ -6,8 +6,6 @@ import {
   toggleAddModal,
   fetchEditProgramari
 } from "../../actions/index";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
 import AppointmentCards from "../../Components/AppointmentCards/AppointmentCards";
 import TableBackground from "../../Components/TableBackground/TableBackground";
 import HourRows from "../../Components/HourRows/HourRows";
@@ -22,7 +20,6 @@ const mapDispatchToProps = dispatch => {
     fetchProgramari: programare => dispatch(fetchProgramari(programare)),
     fetchEditProgramari: programare =>
       dispatch(fetchEditProgramari(programare)),
-    toggleAddModal: toggleModal => dispatch(toggleAddModal(toggleModal))
   };
 };
 
@@ -41,24 +38,6 @@ const AppointmentTable = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const modalToggle = event => {
-    props.toggleAddModal(event);
-    if (
-      event !== undefined &&
-      props.modalToggled === false &&
-      props.programari.length > 0
-    ) {
-      let indexProgramare = props.programari
-        .map(props => props.index)
-        .indexOf(event.target.id);
-      let programare = props.programari[indexProgramare];
-      props.selectProgramare({ ...programare });
-      props.fetchEditProgramari(props.selectedDate);
-    }
-  };
-
-  const emptyState = { pacient: "" };
-
   return (
     <React.Fragment>
       <AddAppointment />
@@ -68,36 +47,24 @@ const AppointmentTable = props => {
             position: "absolute",
             width: "100%",
             height: "100%",
-            zIndex: "-10"
+            zIndex: "-10",
+            marginTop: '1.95rem'
           }}
         >
           <TableBackground />
         </div>
         <HourRows />
-        <div className="tc" style={{ gridColumnStart: "2", gridRowStart: "1" }}>
+        <div className="f4 tc pa3" style={{ gridColumnStart: "2", gridRowStart: "1" }}>
           Cabinetul 1
         </div>
-        <div className="tc" style={{ gridColumnStart: "3", gridRowStart: "1" }}>
+        <div className="f4 tc pa3" style={{ gridColumnStart: "3", gridRowStart: "1" }}>
           Cabinetul 2
         </div>
-        <div className="tc" style={{ gridColumnStart: "4", gridRowStart: "1" }}>
+        <div className="f4 tc pa3" style={{ gridColumnStart: "4", gridRowStart: "1" }}>
           Cabinetul 3
         </div>
         <AppointmentCards />
       </div>
-      <Fab
-        aria-label="add"
-        style={{
-          position: "absolute",
-          marginTop: "91vh",
-          marginLeft: "96vw",
-          backgroundColor: "#357edd",
-          color: "white"
-        }}
-        onClick={() => modalToggle(emptyState)}
-      >
-        <AddIcon />
-      </Fab>
     </React.Fragment>
   );
 };
