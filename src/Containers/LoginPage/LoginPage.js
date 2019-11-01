@@ -36,13 +36,13 @@ const LoginPage = props => {
   return (
     <React.Fragment>
       <div className="loginPageWrapper"></div>
-      <div className="row loginForm pa4 shadow-3">
-        <div className="col s8">
+      <div className="loginForm pa4 shadow-3">
+        <div>
           <p className="tc f3" style={{ letterSpacing: "1.5px" }}>
             Login
           </p>
           <form noValidate onSubmit={onSubmit}>
-            <div className="input-field col s12">
+            <div>
               <Input
                 value={email}
                 placeholder="Email"
@@ -62,7 +62,7 @@ const LoginPage = props => {
                 {loginErrors.emailnotfound}
               </p>
             </div>
-            <div className="input-field col s12">
+            <div>
               <Input
                 onChange={e => setPassword(e.target.value)}
                 placeholder="Password"
@@ -82,7 +82,7 @@ const LoginPage = props => {
                 {loginErrors.passwordincorrect}
               </p>
             </div>
-            <div className="col s12 tr" style={{ paddingLeft: "11.250px" }}>
+            <div className="tr" style={{ paddingLeft: "11.250px" }}>
               <Button
                 style={{
                   width: "150px",

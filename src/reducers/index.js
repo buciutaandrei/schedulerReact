@@ -26,7 +26,7 @@ const initialState = {
   loading: true,
   selectedDate: new Date(),
   formChange: {},
-  selectedProgramare: {},
+  selectedProgramare: { nume: "", prenume: "", telefon: "" },
   programari: [],
   loggedIn: false,
   loginErrors: {}
@@ -47,12 +47,16 @@ function rootReducer(state = initialState, action) {
     }
 
     case TOGGLE_ADD_MODAL: {
-      return Object.assign(
-        {},
-        state,
-        { selectedProgramare: action.payload },
-        { modalState: !state.modalState }
-      );
+      if (action.payload !== undefined) {
+        return Object.assign(
+          {},
+          state,
+          { selectedProgramare: action.payload },
+          { modalState: !state.modalState }
+        );
+      } else {
+        return Object.assign({}, state, { modalState: !state.modalState });
+      }
     }
 
     case USER_LOGGING_STARTED: {

@@ -11,7 +11,8 @@
   display: grid;
   grid-auto-flow: column;
   grid-template-columns: 10% 30% 30% 30%;
-  z-index: 10;
+  z-index: -10;
+  align-self: flex-start;
 }
 
 @media screen and (max-width: 800px) {

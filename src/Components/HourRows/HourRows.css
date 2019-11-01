@@ -3,4 +3,5 @@
   grid-column-start: 1;
   height: 2rem;
   display: table;
+  z-index: 2;
 }

@@ -20,7 +20,7 @@ import {
   LOGGING_OUT
 } from "../constants/action-types";
 import moment from "moment";
-import setAuthToken from "../Components/LoginPage/setAuthToken";
+import setAuthToken from "../Containers/LoginPage/setAuthToken";
 import jwt_decode from "jwt-decode";
 
 export function userLogging(payload) {

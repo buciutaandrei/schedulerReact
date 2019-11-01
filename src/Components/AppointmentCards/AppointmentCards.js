@@ -98,7 +98,7 @@ const AppointmentCards = props => {
         style={{
           gridColumn: cabinetIndex,
           gridRow: `${hourIndex} / span ${durata}`,
-          zIndex: "20"
+          zIndex: "9"
         }}
       >
         <div style={style}>

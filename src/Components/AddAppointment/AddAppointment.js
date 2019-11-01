@@ -1,6 +1,6 @@
+//importing React stuff and Custom Components
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import "./AddAppointment.css";
 import {
   addProgramare,
   handleFormChange,
@@ -11,20 +11,21 @@ import {
   addHoursArray
 } from "../../actions/index";
 import { hoursArray } from "../DataTables/hoursArray";
-import {
-  Form,
-  FormInput,
-  Button,
-  Modal,
-  ModalBody,
-  ModalHeader
-} from "shards-react";
+
+//importing styles
+import { Button, Modal, ModalBody, ModalHeader } from "shards-react";
+import { Dropdown } from "primereact/dropdown";
+import { InputText } from "primereact/inputtext";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "shards-ui/dist/css/shards.min.css";
+import "primereact/resources/themes/nova-light/theme.css";
+import "primereact/resources/primereact.min.css";
+import "./AddAppointment.css";
+
+//importing  DayPicker and Moment
 import DayPicker from "react-day-picker";
 import "react-day-picker/lib/style.css";
 import MomentLocaleUtils from "react-day-picker/moment";
-import { Dropdown } from "primereact/dropdown";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "shards-ui/dist/css/shards.min.css";
 import moment from "moment";
 import "moment/locale/ro";
 
@@ -194,79 +195,88 @@ const AddAppointment = props => {
       >
         <ModalHeader>Programare</ModalHeader>
         <ModalBody style={{ padding: "0" }}>
-          <div className="addAppointmentForm pv4">
-            <DayPicker
-              localeUtils={MomentLocaleUtils}
-              locale="ro"
-              selectedDays={selectedDate}
-              onDayClick={event => handleDateSelect(event)}
-              disabledDays={{ daysOfWeek: [0, 6] }}
-            />
-            <Form className="flex flex-column pr5">
-              <FormInput
-                id="nume"
-                placeholder="Nume"
-                value={selectedProgramare.nume}
-                onChange={handleChange}
-                className="ma2"
-                style={{ width: "200px" }}
+          <div className="addAppointmentForm pv5">
+            <div>
+              <DayPicker
+                localeUtils={MomentLocaleUtils}
+                locale="ro"
+                selectedDays={selectedDate}
+                onDayClick={event => handleDateSelect(event)}
+                disabledDays={{ daysOfWeek: [0, 6] }}
               />
-              <FormInput
-                id="prenume"
-                placeholder="Prenume"
-                value={selectedProgramare.prenume}
-                onChange={handleChange}
-                className="ma2"
-                style={{ width: "200px" }}
-              />
-              <FormInput
-                id="telefon"
-                placeholder="Telefon"
-                value={selectedProgramare.telefon}
-                onChange={handleChange}
-                className="ma2"
-                style={{ width: "200px" }}
-              />
-              <Dropdown
-                id="medic"
-                value={selectedProgramare.medic}
-                options={doctorList}
-                onChange={handleChange}
-                placeholder="Alege medicul"
-                className="ma2"
-                style={{ width: "200px" }}
-              />
-              <Dropdown
-                id="cabinet"
-                value={selectedProgramare.cabinet}
-                options={cabinetList}
-                onChange={event => {
-                  handleChange(event);
-                  busyHours(event.target.value);
-                }}
-                placeholder="Alege cabinetul"
-                className="ma2"
-                style={{ width: "200px" }}
-              />
-              <Dropdown
-                id="ora"
-                value={selectedProgramare.ora}
-                options={props.hoursArray}
-                onChange={handleChange}
-                placeholder="Alege ora"
-                className="ma2"
-                style={{ width: "200px" }}
-              />
-              <Dropdown
-                id="durata"
-                value={selectedProgramare.durata}
-                options={durataList}
-                onChange={handleChange}
-                placeholder="Alege durata"
-                className="ma2"
-                style={{ width: "200px" }}
-              />
-            </Form>
+            </div>
+            <div className="flex flex-row" style={{ width: "min-content" }}>
+              <div>
+                <div className="ma2 mb3">
+                  <InputText
+                    id="nume"
+                    placeholder="Nume"
+                    value={selectedProgramare.nume}
+                    onChange={handleChange}
+                    style={{ width: "200px" }}
+                  />
+                </div>
+                <div className="ma2 mb3">
+                  <InputText
+                    id="prenume"
+                    placeholder="Prenume"
+                    value={selectedProgramare.prenume}
+                    onChange={handleChange}
+                    style={{ width: "200px" }}
+                  />
+                </div>
+                <div className="ma2 mb3">
+                  <InputText
+                    id="telefon"
+                    placeholder="Telefon"
+                    value={selectedProgramare.telefon}
+                    onChange={handleChange}
+                    style={{ width: "200px" }}
+                  />
+                </div>
+              </div>
+              <div>
+                <Dropdown
+                  id="medic"
+                  value={selectedProgramare.medic}
+                  options={doctorList}
+                  onChange={handleChange}
+                  placeholder="Alege medicul"
+                  className="ma2"
+                  style={{ width: "200px" }}
+                />
+                <Dropdown
+                  id="cabinet"
+                  value={selectedProgramare.cabinet}
+                  options={cabinetList}
+                  onChange={event => {
+                    handleChange(event);
+                    busyHours(event.target.value);
+                  }}
+                  placeholder="Alege cabinetul"
+                  className="ma2"
+                  style={{ width: "200px" }}
+                />
+                <Dropdown
+                  id="ora"
+                  value={selectedProgramare.ora}
+                  options={props.hoursArray}
+                  onChange={handleChange}
+                  placeholder="Alege ora"
+                  className="ma2"
+                  style={{ width: "200px" }}
+                />
+                <Dropdown
+                  id="durata"
+                  value={selectedProgramare.durata}
+                  options={durataList}
+                  onChange={handleChange}
+                  placeholder="Alege durata"
+                  className="ma2"
+                  style={{ width: "200px" }}
+                />
+              </div>
+            </div>
           </div>
           <Button
             style={{ position: "absolute", right: "20px", bottom: "20px" }}

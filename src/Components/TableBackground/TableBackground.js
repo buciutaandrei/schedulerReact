@@ -19,7 +19,7 @@ const TableBackground = () => {
           >
             {" "}
           </div>
-          <div  className="tableBackground" style={{ width: "30%" }}>
+          <div className="tableBackground" style={{ width: "30%" }}>
             {" "}
           </div>
           <div className="tableBackground" style={{ width: "30%" }}>
