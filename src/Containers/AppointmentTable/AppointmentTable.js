@@ -9,6 +9,8 @@ import AddAppointment from "../../Components/AddAppointment/AddAppointment";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css";
 import { fetchProgramari } from "../../actions/index";
+import RefreshIcon from '@material-ui/icons/Refresh';
+import { Fab } from "@material-ui/core";
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -36,6 +38,10 @@ const AppointmentTable = props => {
   return (
     <React.Fragment>
       <AddAppointment />
+      <Fab className="" style={{ backgroundColor: "#74adff", color: 'white', position: 'absolute', top:'1rem', right: '2rem', height: 'auto', width: 'auto' }}
+            onClick={() => props.fetchProgramari(props.selectedDate)}>
+        <RefreshIcon className='ma2' style={{ fontSize: '2.5rem' }}/>
+      </Fab>
       <div className="tableWrapper">
         <div
           style={{
@@ -50,20 +56,20 @@ const AppointmentTable = props => {
         </div>
         <HourRows />
         <div
-          className="f4 tc pa3"
-          style={{ gridColumnStart: "2", gridRowStart: "1" }}
+          className="f4 tc"
+          style={{ padding: '1rem', gridColumnStart: "2", gridRowStart: "1" }}
         >
           Cabinetul 1
         </div>
         <div
-          className="f4 tc pa3"
-          style={{ gridColumnStart: "3", gridRowStart: "1" }}
+          className="f4 tc"
+          style={{ padding: '1rem', gridColumnStart: "3", gridRowStart: "1" }}
         >
           Cabinetul 2
         </div>
         <div
-          className="f4 tc pa3"
-          style={{ gridColumnStart: "4", gridRowStart: "1" }}
+          className="f4 tc"
+          style={{ padding: '1rem', gridColumnStart: "4", gridRowStart: "1" }}
         >
           Cabinetul 3
         </div>

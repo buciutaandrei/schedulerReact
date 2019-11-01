@@ -1,6 +1,6 @@
 .hourWrapper {
   background-color: white;
   grid-column-start: 1;
-  height: 2em;
+  height: 2rem;
   display: table;
 }

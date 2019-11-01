@@ -73,9 +73,9 @@ const App = props => {
           <Button
             style={{
               position: "absolute",
-              top: "0",
+              bottom: "0",
               left: "0",
-              width: "22vw",
+              width: "23rem",
               height: "2rem",
               color: "#fafafa",
               letterSpacing: "2px"
@@ -88,12 +88,12 @@ const App = props => {
             aria-label="add"
             style={{
               position: "absolute",
-              bottom: "20px",
-              left: "20vw",
+              top: "1rem",
+              left: "21rem",
               backgroundColor: "#74adff",
               color: "white",
-              width: "4vw",
-              height: "4vw"
+              width: "4rem",
+              height: "4rem"
             }}
             onClick={() => modalToggle(emptyState)}
           >
@@ -106,7 +106,7 @@ const App = props => {
               top: "0",
               left: "0",
               bottom: "0",
-              width: "22vw",
+              width: "23rem",
               zIndex: "-10"
             }}
             className="shadow-5"
