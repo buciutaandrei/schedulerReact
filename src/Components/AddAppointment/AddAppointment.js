@@ -55,12 +55,14 @@ const mapStateToProps = state => {
 };
 
 const AddAppointment = props => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
   useEffect(() => {
     props.fetchEditProgramari(props.selectedDate);
+    const newDate = new Date(props.selectedDate);
+    setSelectedDate(newDate);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  }, [props.selectedDate]);
 
   const {
     nume,
@@ -98,7 +100,8 @@ const AddAppointment = props => {
 
   const busyHours = value => {
     props.handleFormChange({ ora: "" });
-    let busyHoursArray = [];
+    let theseHours = [];
+    let busyHoursArray = [0];
     let availableHoursArray = [];
     let availableHoursList = [];
     props.programariEdit.map(programare => {
@@ -108,17 +111,32 @@ const AddAppointment = props => {
           const busyHours = moment(startTime, "HH:mm")
             .add(i * 0.5, "h")
             .format("Hmm");
-          busyHoursArray = busyHoursArray.concat(busyHours);
+          busyHoursArray = busyHoursArray.concat(Number(busyHours));
         }
       }
       return null;
     });
-    const array = busyHoursArray.map(hour => Number(hour));
-    array.push(0);
-    const temp = new Set(array);
+
+    if (selectedProgramare.edit) {
+      theseHours = [];
+      for (let i = 0; i < selectedProgramare.durata; i++) {
+        theseHours.push(
+          Number(
+            moment(selectedProgramare.ora, "Hmm")
+              .add(0.5 * i, "h")
+              .format("HHmm")
+          )
+        );
+      }
+      const temp = new Set(theseHours);
+      theseHours = [...new Set([...busyHoursArray].filter(x => !temp.has(x)))];
+    }
+
+    const temp = new Set(busyHoursArray);
     availableHoursArray = [
       ...new Set([...hoursArray].filter(x => !temp.has(x)))
     ];
+
     availableHoursArray.map(hour => {
       const item = {
         label: moment(hour, "Hmm").format("HH:mm"),
@@ -143,7 +161,6 @@ const AddAppointment = props => {
     props.addProgramare(programare);
     props.toggleAddModal(programare);
     props.addHoursArray([]);
-    setTimeout(() => props.fetchProgramari(props.selectedDate), 100);
   };
 
   const programareDelete = () => {

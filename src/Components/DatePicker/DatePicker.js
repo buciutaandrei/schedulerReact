@@ -3,7 +3,6 @@ import "./DatePicker.css";
 import DayPicker from "react-day-picker";
 import "react-day-picker/lib/style.css";
 import MomentLocaleUtils from "react-day-picker/moment";
-import "moment/locale/ro";
 import { connect } from "react-redux";
 import { selectDate } from "../../actions/index";
 import { fetchProgramari } from "../../actions/index";

@@ -26,6 +26,8 @@ const mapStateToProps = state => {
 };
 
 const LeftPanel = props => {
+  const emptyState = { nume: "", prenume: "", telefon: "" };
+
   const modalToggle = event => {
     props.toggleAddModal(event);
     if (
@@ -93,7 +95,7 @@ const LeftPanel = props => {
           height: "4rem",
           zIndex: "20"
         }}
-        onClick={() => modalToggle()}
+        onClick={() => modalToggle(emptyState)}
       >
         <AddIcon style={{ fontSize: "2.5rem" }} />
       </Fab>
