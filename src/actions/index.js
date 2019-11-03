@@ -15,7 +15,8 @@ import {
   USER_LOGGING_ERROR,
   LOGGING_OUT,
   SET_PROGRAMARI,
-  SET_PROGRAMARI_EDIT
+  SET_PROGRAMARI_EDIT,
+  SET_ERROR
 } from "../constants/action-types";
 import moment from "moment";
 import setAuthToken from "../Containers/LoginPage/setAuthToken";
@@ -40,6 +41,10 @@ export function userLogging(payload) {
         dispatch({ type: USER_LOGGING_ERROR, payload: err.response.data })
       );
   };
+}
+
+export function setError(payload) {
+  return { type: SET_ERROR, payload };
 }
 
 export function setProgramari(payload) {

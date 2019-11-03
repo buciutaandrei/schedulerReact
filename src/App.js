@@ -29,7 +29,9 @@ const mapStateToProps = state => {
   return {
     loggedIn: state.loggedIn,
     selectedDate: state.selectedDate,
-    loading: state.loading
+    loading: state.loading,
+    error: state.error,
+    errorContent: state.errorContent
   };
 };
 
@@ -50,27 +52,36 @@ const App = props => {
     }
   }
 
-  if (props.loggedIn) {
-    return (
-      <React.Fragment>
-        <CssBaseline />
-        <LoadingOverlay active={props.loading} spinner>
-          <div className="appWrapper flex flex-wrap">
-            <LeftPanel />
-            <AppointmentTable />
-          </div>
-        </LoadingOverlay>
-      </React.Fragment>
-    );
+  if (props.error) {
+    const errorArray = props.errorContent.map(eroare => {
+      console.log(eroare.toString());
+      return <p>{eroare.toString()}</p>;
+    });
+
+    return <div>{errorArray}</div>;
   } else {
-    return (
-      <React.Fragment>
-        <LoadingOverlay active={false} spinner>
+    if (props.loggedIn) {
+      return (
+        <React.Fragment>
           <CssBaseline />
-          <LoginPage />
-        </LoadingOverlay>
-      </React.Fragment>
-    );
+          <LoadingOverlay active={props.loading} spinner>
+            <div className="appWrapper flex flex-wrap">
+              <LeftPanel />
+              <AppointmentTable />
+            </div>
+          </LoadingOverlay>
+        </React.Fragment>
+      );
+    } else {
+      return (
+        <React.Fragment>
+          <LoadingOverlay active={false} spinner>
+            <CssBaseline />
+            <LoginPage />
+          </LoadingOverlay>
+        </React.Fragment>
+      );
+    }
   }
 };
 

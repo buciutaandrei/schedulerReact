@@ -7,7 +7,8 @@ import {
   fetchEditProgramari,
   setProgramari,
   setProgramariEdit,
-  selectDate
+  selectDate,
+  setError
 } from "../../actions/index";
 import AppointmentCards from "../../Components/AppointmentCards/AppointmentCards";
 import TableBackground from "../../Components/TableBackground/TableBackground";
@@ -27,7 +28,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(fetchEditProgramari(programare)),
     setProgramari: programari => dispatch(setProgramari(programari)),
     setProgramariEdit: programari => dispatch(setProgramariEdit(programari)),
-    selectDate: selectedDate => dispatch(selectDate(selectedDate))
+    selectDate: selectedDate => dispatch(selectDate(selectedDate)),
+    setError: error => dispatch(setError(error))
   };
 };
 
@@ -54,6 +56,18 @@ const AppointmentTable = props => {
     });
     socket.on("dataFetchEdit", input => {
       props.setProgramariEdit(input);
+    });
+    socket.on("error", error => {
+      document.write(`Error: ${error}`);
+    });
+    socket.on("connect_error", error => {
+      document.write(`Eroare la conexiune. Reincercati.`);
+    });
+    socket.on("connect_timeout", error => {
+      document.write(`Conexiunea a expirat.`);
+    });
+    socket.on("reconnect", () => {
+      window.location.reload(true);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

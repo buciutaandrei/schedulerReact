@@ -18,7 +18,8 @@ import {
   USER_LOGGING_ERROR,
   LOGGING_OUT,
   SET_PROGRAMARI,
-  SET_PROGRAMARI_EDIT
+  SET_PROGRAMARI_EDIT,
+  SET_ERROR
 } from "../constants/action-types";
 
 const initialState = {
@@ -32,7 +33,8 @@ const initialState = {
   programari: [],
   loggedIn: false,
   loginErrors: {},
-  programariEdit: []
+  programariEdit: [],
+  error: false
 };
 
 function rootReducer(state = initialState, action) {
@@ -125,6 +127,13 @@ function rootReducer(state = initialState, action) {
     case ADD_PROGRAMARE_SUCCESS: {
       return Object.assign({}, state, {
         adding: false
+      });
+    }
+
+    case SET_ERROR: {
+      return Object.assign({}, state, {
+        error: true,
+        errorContent: action.payload
       });
     }
 
