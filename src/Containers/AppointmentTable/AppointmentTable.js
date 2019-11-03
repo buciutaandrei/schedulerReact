@@ -58,13 +58,13 @@ const AppointmentTable = props => {
       props.setProgramariEdit(input);
     });
     socket.on("error", error => {
-      document.write(`Error: ${error}`);
+      document.write(`Error: ${error} <br />`);
     });
     socket.on("connect_error", error => {
-      document.write(`Eroare la conexiune. Reincercati.`);
+      document.write(`Eroare la conexiune. Reincercati. <br />`);
     });
     socket.on("connect_timeout", error => {
-      document.write(`Conexiunea a expirat.`);
+      document.write(`Conexiunea a expirat. <br />`);
     });
     socket.on("reconnect", () => {
       window.location.reload(true);
