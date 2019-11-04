@@ -1,45 +1,25 @@
-import React, { useEffect } from "react";
-import "./App.css";
-import "tachyons";
-import AppointmentTable from "./Containers/AppointmentTable/AppointmentTable";
-import { CssBaseline } from "@material-ui/core";
-import { connect } from "react-redux";
-import LoadingOverlay from "react-loading-overlay";
-import {
-  toggleAddModal,
-  setUser,
-  loggingOut,
-  fetchProgramari
-} from "./actions/index";
+import React from "react";
+import MainPage from "./Containers/MainPage/MainPage";
 import LoginPage from "./Containers/LoginPage/LoginPage";
+import { connect } from "react-redux";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./Containers/LoginPage/setAuthToken";
-import LeftPanel from "./Containers/LeftPanel/LeftPanel";
-
-const mapDispatchToProps = dispatch => {
-  return {
-    toggleAddModal: toggleModal => dispatch(toggleAddModal(toggleModal)),
-    setUser: token => dispatch(setUser(token)),
-    loggingOut: logOut => dispatch(loggingOut(logOut)),
-    fetchProgramari: programari => dispatch(fetchProgramari(programari))
-  };
-};
+import { loggingOut, setUser } from "./actions/index";
 
 const mapStateToProps = state => {
   return {
-    loggedIn: state.loggedIn,
-    selectedDate: state.selectedDate,
-    loading: state.loading,
-    error: state.error,
-    errorContent: state.errorContent
+    loggedIn: state.loggedIn
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    loggingOut: logOut => dispatch(loggingOut(logOut)),
+    setUser: user => dispatch(setUser(user))
   };
 };
 
 const App = props => {
-  useEffect(() => {
-    props.fetchProgramari(props.selectedDate);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   // Check for token to keep user logged in
   if (localStorage.jwtToken) {
     const token = localStorage.jwtToken;
@@ -52,36 +32,10 @@ const App = props => {
     }
   }
 
-  if (props.error) {
-    const errorArray = props.errorContent.map(eroare => {
-      console.log(eroare.toString());
-      return <p>{eroare.toString()}</p>;
-    });
-
-    return <div>{errorArray}</div>;
+  if (props.loggedIn) {
+    return <MainPage />;
   } else {
-    if (props.loggedIn) {
-      return (
-        <React.Fragment>
-          <CssBaseline />
-          <LoadingOverlay active={props.loading} spinner>
-            <div className="appWrapper flex flex-wrap">
-              <LeftPanel />
-              <AppointmentTable />
-            </div>
-          </LoadingOverlay>
-        </React.Fragment>
-      );
-    } else {
-      return (
-        <React.Fragment>
-          <LoadingOverlay active={false} spinner>
-            <CssBaseline />
-            <LoginPage />
-          </LoadingOverlay>
-        </React.Fragment>
-      );
-    }
+    return <LoginPage />;
   }
 };
 

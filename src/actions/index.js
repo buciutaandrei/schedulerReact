@@ -29,7 +29,7 @@ export function userLogging(payload) {
   return dispatch => {
     dispatch({ type: USER_LOGGING_STARTED });
     axios
-      .post("http://localhost:3001/api/users/login", payload)
+      .post(`http://localhost:3001/api/users/login`, payload)
       .then(res => {
         const { token } = res.data;
         localStorage.setItem("jwtToken", token);

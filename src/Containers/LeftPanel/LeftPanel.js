@@ -3,46 +3,19 @@ import DatePicker from "../../Components/DatePicker/DatePicker.js";
 import "tachyons";
 import { Button } from "@material-ui/core";
 import { connect } from "react-redux";
-import { toggleAddModal, setUser, loggingOut } from "../../actions/index";
+import { toggleAddModal, loggingOut } from "../../actions/index";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 
 const mapDispatchToProps = dispatch => {
   return {
     toggleAddModal: toggleModal => dispatch(toggleAddModal(toggleModal)),
-    setUser: token => dispatch(setUser(token)),
     loggingOut: logOut => dispatch(loggingOut(logOut))
-  };
-};
-
-const mapStateToProps = state => {
-  return {
-    loggedIn: state.loggedIn,
-    modalState: state.modalState,
-    selectedDate: state.selectedDate,
-    selectedProgramare: state.selectedProgramare,
-    programari: state.programari
   };
 };
 
 const LeftPanel = props => {
   const emptyState = { nume: "", prenume: "", telefon: "" };
-
-  const modalToggle = event => {
-    props.toggleAddModal(event);
-    if (
-      event !== undefined &&
-      props.modalToggled === false &&
-      props.programari.length > 0
-    ) {
-      let indexProgramare = props.programari
-        .map(props => props.index)
-        .indexOf(event.target.id);
-      let programare = props.programari[indexProgramare];
-      props.selectProgramare({ ...programare });
-      props.fetchEditProgramari(props.selectedDate);
-    }
-  };
 
   return (
     <div
@@ -95,7 +68,7 @@ const LeftPanel = props => {
           height: "4rem",
           zIndex: "20"
         }}
-        onClick={() => modalToggle(emptyState)}
+        onClick={() => props.toggleAddModal(emptyState)}
       >
         <AddIcon style={{ fontSize: "2.5rem" }} />
       </Fab>
@@ -104,6 +77,6 @@ const LeftPanel = props => {
 };
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(LeftPanel);

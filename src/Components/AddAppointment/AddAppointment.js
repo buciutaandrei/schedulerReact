@@ -7,8 +7,7 @@ import {
   toggleAddModal,
   deleteProgramare,
   fetchProgramari,
-  fetchEditProgramari,
-  addHoursArray
+  fetchEditProgramari
 } from "../../actions/index";
 import { hoursArray } from "../DataTables/hoursArray";
 
@@ -37,8 +36,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(fetchEditProgramari(programari)),
     handleFormChange: formChange => dispatch(handleFormChange(formChange)),
     toggleAddModal: toggleModal => dispatch(toggleAddModal(toggleModal)),
-    deleteProgramare: programare => dispatch(deleteProgramare(programare)),
-    addHoursArray: hours => dispatch(addHoursArray(hours))
+    deleteProgramare: programare => dispatch(deleteProgramare(programare))
   };
 };
 
@@ -56,6 +54,7 @@ const mapStateToProps = state => {
 
 const AddAppointment = props => {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [freeHoursArray, setFreeHoursArray] = useState([]);
 
   useEffect(() => {
     props.fetchEditProgramari(props.selectedDate);
@@ -145,7 +144,7 @@ const AddAppointment = props => {
       availableHoursList.push(item);
       return null;
     });
-    props.addHoursArray(availableHoursList);
+    setFreeHoursArray(availableHoursList);
   };
 
   const addProgramare = () => {
@@ -160,7 +159,7 @@ const AddAppointment = props => {
     props.handleFormChange({ index: index });
     props.addProgramare(programare);
     props.toggleAddModal(programare);
-    props.addHoursArray([]);
+    setFreeHoursArray([]);
   };
 
   const programareDelete = () => {
@@ -277,7 +276,7 @@ const AddAppointment = props => {
                 <Dropdown
                   id="ora"
                   value={selectedProgramare.ora}
-                  options={props.hoursArray}
+                  options={freeHoursArray}
                   onChange={handleChange}
                   placeholder="Alege ora"
                   className="ma2"

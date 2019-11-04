@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { hoursArray } from "../../Components/DataTables/hoursArray";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -7,16 +7,18 @@ import "./AppointmentCards.css";
 import {
   deleteProgramare,
   toggleAddModal,
-  setProgramari
+  setProgramari,
+  setProgramariEdit,
+  fetchProgramari,
+  selectDate
 } from "../../actions/index";
+import io from "socket.io-client";
+import moment from "moment";
 
 const mapStateToProps = state => {
   return {
     programari: state.programari,
-    selectedDate: state.selectedDate,
-    adding: state.adding,
-    deleting: state.deleting,
-    loading: state.loading
+    selectedDate: state.selectedDate
   };
 };
 
@@ -24,11 +26,44 @@ const mapDispatchToProps = dispatch => {
   return {
     deleteProgramare: programare => dispatch(deleteProgramare(programare)),
     toggleAddModal: toggleModal => dispatch(toggleAddModal(toggleModal)),
-    setProgramari: programari => dispatch(setProgramari(programari))
+    setProgramari: programari => dispatch(setProgramari(programari)),
+    setProgramariEdit: programari => dispatch(setProgramariEdit(programari)),
+    fetchProgramari: programari => dispatch(fetchProgramari(programari)),
+    selectDate: date => dispatch(selectDate(date))
   };
 };
 
 const AppointmentCards = props => {
+  useEffect(() => {
+    props.fetchProgramari(props.selectedDate);
+    const socket = io.connect("http://localhost:3001");
+    socket.on("dataFetch", input => {
+      props.setProgramari(input);
+    });
+    socket.on("refresh", input => {
+      const data = moment(input, "DDMMY").format();
+      const newDate = new Date(data);
+      props.fetchProgramari(data);
+      props.selectDate(newDate);
+    });
+    socket.on("dataFetchEdit", input => {
+      props.setProgramariEdit(input);
+    });
+    socket.on("error", error => {
+      document.write(`Error: ${error} <br />`);
+    });
+    socket.on("connect_error", error => {
+      document.write(`Eroare la conexiune. Reincercati. <br />`);
+    });
+    socket.on("connect_timeout", error => {
+      document.write(`Conexiunea a expirat. <br />`);
+    });
+    socket.on("reconnect", () => {
+      window.location.reload(true);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const { programari, selectedDate, deleteProgramare } = props;
 
   const handleEdit = event => {
